@@ -2,7 +2,7 @@ set -x
 
 read -r -d '' training_commands <<EOF
 openrlhf.cli.train_rm \
-   --save_path ../checkpoint/tinyllama_reward_model \
+   --save_path ../checkpoint/TinyLlamaChat_rm \
    --save_steps -1 \
    --logging_steps 1 \
    --eval_steps -1 \
