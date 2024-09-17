@@ -7,11 +7,11 @@ openrlhf.cli.train_rm \
    --logging_steps 1 \
    --eval_steps -1 \
    --train_batch_size 256 \
-   --micro_train_batch_size 16 \
+   --micro_train_batch_size 8 \
    --pretrain TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
    --bf16 \
    --max_epochs 1 \
-   --max_len 4096 \
+   --max_len 2048 \
    --zero_stage 0 \
    --learning_rate 9e-6 \
    --dataset OpenRLHF/preference_dataset_mixture2_and_safe_pku \
