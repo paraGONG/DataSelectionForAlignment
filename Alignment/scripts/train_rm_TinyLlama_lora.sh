@@ -7,8 +7,8 @@ openrlhf.cli.train_rm \
    --logging_steps 1 \
    --eval_steps -1 \
    --train_batch_size 256 \
-   --micro_train_batch_size 1 \
-   --pretrain TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
+   --micro_train_batch_size 2 \
+   --pretrain TinyLlama/TinyLlama_v1.1 \
    --max_epochs 1 \
    --max_len 4096 \
    --zero_stage 0 \
