@@ -2,12 +2,12 @@ set -x
 
 read -r -d '' training_commands <<EOF
 openrlhf.cli.train_rm \
-   --save_path ../checkpoint/TinyLlama_lora_rm \
+   --save_path ../checkpoint/TinyLlama_lora_v100_rm \
    --save_steps -1 \
    --logging_steps 1 \
    --eval_steps -1 \
    --train_batch_size 256 \
-   --micro_train_batch_size 2 \
+   --micro_train_batch_size 1 \
    --pretrain TinyLlama/TinyLlama_v1.1 \
    --max_epochs 1 \
    --max_len 4096 \
