@@ -33,7 +33,7 @@ openrlhf.cli.train_ppo \
    --lora_alpha 16 \
    --target_modules q_proj v_proj \
    --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
-   --wandb_project OpenRLHF-PPO \
+   --wandb_project OpenRLHF-PPO
 EOF
     # --use_wandb [WANDB_TOKENS] or True (use wandb login command)
     # --remote_rm_url http://localhost:5000/get_reward
