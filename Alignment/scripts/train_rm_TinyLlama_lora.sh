@@ -9,7 +9,6 @@ openrlhf.cli.train_rm \
    --train_batch_size 256 \
    --micro_train_batch_size 1 \
    --pretrain TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
-   --bf16 \
    --max_epochs 1 \
    --max_len 4096 \
    --zero_stage 0 \
@@ -20,8 +19,11 @@ openrlhf.cli.train_rm \
    --rejected_key rejected \
    --load_checkpoint \
    --gradient_checkpointing \
+   --lora_rank 8 \
+   --lora_alpha 16 \
+   --target_modules q_proj v_proj \
    --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
-   --wandb_project DataSelectionForAlignment
+   --wandb_project DataSelectionForAlignment \
 
 EOF
 #   --lora_rank 8 \
