@@ -9,6 +9,7 @@ openrlhf.cli.train_rm \
    --train_batch_size 256 \
    --micro_train_batch_size 2 \
    --pretrain TinyLlama/TinyLlama_v1.1 \
+   --bf16 \
    --max_epochs 1 \
    --max_len 4096 \
    --zero_stage 0 \
