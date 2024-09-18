@@ -6,7 +6,6 @@ openrlhf.cli.train_sft \
    --dataset yifangong/processed_alpaca \
    --input_key input \
    --output_key output \
-   --input_template "User: {}\nAssistant: " \
    --train_batch_size 128 \
    --micro_train_batch_size 2 \
    --max_samples 500000 \
