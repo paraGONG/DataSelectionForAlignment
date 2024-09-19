@@ -11,7 +11,6 @@ count = 0
 # 遍历 context_messages 列
 for i,data in enumerate(dataset['train']):
     context_messages = data['context_messages']
-    objs = json.loads(context_messages)
-    if len(objs) > 1:
+    if len(context_messages) > 1:
         count += 1
 print(count)
