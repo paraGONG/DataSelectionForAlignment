@@ -46,7 +46,9 @@ class PromptDataset(Dataset):
         self.prompts = []
         for data in tqdm(dataset, desc="Preprocessing data", disable=not self.strategy.is_rank_0()):
             prompt = preprocess_data(data, input_template, input_key, apply_chat_template)
+            print(prompt)
             self.prompts.append(prompt)
+            break
 
     def __len__(self):
         length = len(self.prompts)
