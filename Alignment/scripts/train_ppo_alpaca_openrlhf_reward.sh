@@ -34,7 +34,7 @@ openrlhf.cli.train_ppo \
    --target_modules q_proj v_proj \
    --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
    --wandb_project OpenRLHF-PPO-Alpaca-openrlhf-reward \
-   --wandb_run_name openrlhf-ppo-alpaca-7b-reproduced-openrlhf-reward-model \
+   --wandb_run_name openrlhf-ppo-alpaca-7b-reproduced-openrlhf-reward-model
 EOF
     # --use_wandb [WANDB_TOKENS] or True (use wandb login command)
     # --remote_rm_url http://localhost:5000/get_reward
