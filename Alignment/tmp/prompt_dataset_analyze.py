@@ -7,7 +7,7 @@ dataset = load_dataset("OpenRLHF/prompt-collection-v0.1")
 print(dataset['train'].column_names)
 
 # 遍历 context_messages 列
-for i,data in enumerate(dataset):
+for i,data in enumerate(dataset['train']):
     context_messages = data['context_messages']
     print(context_messages)
     if i == 10:
