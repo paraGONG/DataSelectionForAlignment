@@ -13,4 +13,6 @@ for i,data in enumerate(dataset['train']):
     context_messages = data['context_messages']
     if len(context_messages) > 1:
         count += 1
+        print(context_messages)
+        print("\n")
 print(count)
