@@ -24,7 +24,7 @@ openrlhf.cli.train_ppo \
    --init_kl_coef 0.01 \
    --prompt_data OpenRLHF/prompt-collection-v0.1 \
    --input_key context_messages \
-   --input_template 'BEGINNING OF CONVERSATION: USER: {} ASSISTANT:' \
+   --apply_chat_template \
    --max_samples 100000 \
    --normalize_reward \
    --load_checkpoint \
@@ -36,6 +36,7 @@ openrlhf.cli.train_ppo \
    --wandb_project OpenRLHF-PPO-Alpaca-openrlhf-reward \
    --wandb_run_name openrlhf-ppo-alpaca-7b-reproduced-openrlhf-reward-model
 EOF
+    # --input_template 'BEGINNING OF CONVERSATION: USER: {} ASSISTANT:' \
     # --use_wandb [WANDB_TOKENS] or True (use wandb login command)
     # --remote_rm_url http://localhost:5000/get_reward
 
