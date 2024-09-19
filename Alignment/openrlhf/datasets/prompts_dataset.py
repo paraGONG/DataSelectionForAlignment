@@ -48,7 +48,8 @@ class PromptDataset(Dataset):
             prompt = preprocess_data(data, input_template, input_key, apply_chat_template)
             print(prompt)
             self.prompts.append(prompt)
-            break
+            if len(self.prompts) == 500:
+                break
 
     def __len__(self):
         length = len(self.prompts)
