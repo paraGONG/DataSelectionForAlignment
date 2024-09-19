@@ -1,0 +1,33 @@
+deepspeed --module openrlhf.cli.train_ppo \
+  --pretrain  yifangong/alpaca-1.1b-reproduced-tinyllama-v1.1 \
+  --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
+  --save_path ../checkpoint/tinyalpaca-1.1b-reward-model-tiny-llama-chat-rlhf-reward-norm \
+  --ckpt_path  ../ckpt/checkpoints_ppo_tinyalpaca_reward_norm \
+  --save_steps 10 \
+  --max_ckpt_num 500 \
+  --logging_steps 1 \
+  --eval_steps -1 \
+  --micro_train_batch_size 2 \
+  --train_batch_size 128 \
+  --micro_rollout_batch_size 4 \
+  --rollout_batch_size 512 \
+  --max_epochs 1 \
+  --prompt_max_len 1024 \
+  --generate_max_len 1024 \
+  --zero_stage 0 \
+  --bf16 \
+  --actor_learning_rate 5e-7 \
+  --critic_learning_rate 9e-6 \
+  --init_kl_coef 0.01 \
+  --prompt_data PKU-Alignment/PKU-SafeRLHF-prompt \
+  --input_key prompt \
+  --input_template "User: {}\nAssistant: " \
+  --max_samples 100000 \
+  --normalize_reward \
+  --load_checkpoint \
+  --lora_rank 8 \
+  --lora_alpha 16 \
+  --target_modules q_proj v_proj \
+  --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
+  --wandb_project tinyalpaca-reward-model-tiny-llama-chat-rlhf-reward-norm \
+  --wandb_run_name tinyalpaca-reward-model-tiny-llama-chat-rlhf-lora-reward-norm
