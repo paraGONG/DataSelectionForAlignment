@@ -8,7 +8,7 @@ print(dataset['train'].column_names)
 
 # 遍历 context_messages 列
 for i,data in enumerate(dataset):
-    context_messages = data['train']['context_messages']
+    context_messages = data['context_messages']
     print(context_messages)
     if i == 10:
         break
