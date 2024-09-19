@@ -10,7 +10,7 @@ deepspeed --module openrlhf.cli.train_ppo \
   --micro_train_batch_size 2 \
   --train_batch_size 128 \
   --micro_rollout_batch_size 4 \
-  --rollout_batch_size 1024 \
+  --rollout_batch_size 512 \
   --max_epochs 1 \
   --prompt_max_len 1024 \
   --generate_max_len 1024 \
@@ -19,8 +19,8 @@ deepspeed --module openrlhf.cli.train_ppo \
   --actor_learning_rate 5e-7 \
   --critic_learning_rate 9e-6 \
   --init_kl_coef 0.01 \
-  --prompt_data OpenRLHF/prompt-collection-v0.1 \
-  --input_key context_messages \
+  --prompt_data PKU-Alignment/PKU-SafeRLHF-prompt \
+  --input_key prompt \
   --input_template "User: {}\nAssistant: " \
   --max_samples 100000 \
   --load_checkpoint \
