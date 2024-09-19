@@ -1,9 +1,9 @@
 deepspeed --module openrlhf.cli.train_ppo \
-  --pretrain  PKU-Alignment/alpaca-7b-reproduced-llama-2 \
-  --reward_pretrain OpenRLHF/Llama-2-7b-rm-anthropic_hh-lmsys-oasst-webgpt \
-  --save_path ../checkpoint/alpaca-7b-reproduced-llama-2-rlhf \
+  --pretrain  yifangong/alpaca-1.1b-reproduced-tinyllama-v1.1 \
+  --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
+  --save_path ../checkpoint/tinyalpaca-1.1b-reward-model-tiny-llama-chat-rlhf \
   --ckpt_path  ../ckpt/checkpoints_ppo \
-  --save_steps 25 \
+  --save_steps 10 \
   --max_ckpt_num 500 \
   --logging_steps 1 \
   --eval_steps -1 \
@@ -14,21 +14,19 @@ deepspeed --module openrlhf.cli.train_ppo \
   --max_epochs 1 \
   --prompt_max_len 1024 \
   --generate_max_len 1024 \
-  --zero_stage 2 \
+  --zero_stage 0 \
   --bf16 \
   --actor_learning_rate 5e-7 \
   --critic_learning_rate 9e-6 \
   --init_kl_coef 0.01 \
   --prompt_data OpenRLHF/prompt-collection-v0.1 \
   --input_key context_messages \
-  --input_template 'BEGINNING OF CONVERSATION: USER: {} ASSISTANT:' \
+  --input_template "User: {}\nAssistant: " \
   --max_samples 100000 \
-  --normalize_reward \
   --load_checkpoint \
-  --gradient_checkpointing \
   --lora_rank 8 \
   --lora_alpha 16 \
   --target_modules q_proj v_proj \
   --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
-  --wandb_project OpenRLHF-PPO-Alpaca-openrlhf-reward \
-  --wandb_run_name openrlhf-ppo-alpaca-7b-reproduced-openrlhf-reward-model
+  --wandb_project tinyalpaca-1.1b-reward-model-tiny-llama-chat-rlhf \
+  --wandb_run_name tinyalpaca-1.1b-reward-model-tiny-llama-chat-rlhf-lora
