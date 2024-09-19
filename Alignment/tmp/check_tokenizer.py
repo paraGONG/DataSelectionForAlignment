@@ -1,6 +1,6 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-checkpoint = "yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model"
+checkpoint = "yifangong/alpaca-1.1b-reproduced-tinyllama-v1.1"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint)
 # model = AutoModelForCausalLM.from_pretrained(checkpoint)  # You may want to use bfloat16 and/or move to GPU here
 
