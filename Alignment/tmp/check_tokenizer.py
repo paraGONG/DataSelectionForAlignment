@@ -1,16 +1,11 @@
-from transformers import AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
-# 加载预训练的 tokenizer（替换成你自己的模型名）
-tokenizer = AutoTokenizer.from_pretrained("PKU-Alignment/alpaca-7b-reproduced-llama-2")
+checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint)
+# model = AutoModelForCausalLM.from_pretrained(checkpoint)  # You may want to use bfloat16 and/or move to GPU here
 
-# 获取 tokenizer 的词表大小
-vocab_size = tokenizer.vocab_size
-
-print(f"Tokenizer 词表大小: {vocab_size}")
-
-tokenizer = AutoTokenizer.from_pretrained("OpenRLHF/Llama-2-7b-rm-anthropic_hh-lmsys-oasst-webgpt")
-
-# 获取 tokenizer 的词表大小
-vocab_size = tokenizer.vocab_size
-
-print(f"Tokenizer 词表大小: {vocab_size}")
+messages = [
+    {"role": "user", "content": "How many helicopters can a human eat in one sitting?"},
+ ]
+tokenized_chat = tokenizer.apply_chat_template(messages, tokenize=True, add_generation_prompt=True, return_tensors="pt")
+print(tokenizer.decode(tokenized_chat[0]))
