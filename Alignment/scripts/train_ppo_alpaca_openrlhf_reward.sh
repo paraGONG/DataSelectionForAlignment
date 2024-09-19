@@ -24,7 +24,7 @@ openrlhf.cli.train_ppo \
    --init_kl_coef 0.01 \
    --prompt_data OpenRLHF/prompt-collection-v0.1 \
    --input_key context_messages \
-   --apply_chat_template \
+   --input_template 'BEGINNING OF CONVERSATION: USER: {} ASSISTANT:' \
    --max_samples 100000 \
    --normalize_reward \
    --load_checkpoint \
