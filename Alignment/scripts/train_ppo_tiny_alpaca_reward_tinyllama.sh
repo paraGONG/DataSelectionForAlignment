@@ -28,5 +28,5 @@ deepspeed --module openrlhf.cli.train_ppo \
   --lora_alpha 16 \
   --target_modules q_proj v_proj \
   --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
-  --wandb_project tinyalpaca-1.1b-reward-model-tiny-llama-chat-rlhf \
-  --wandb_run_name tinyalpaca-1.1b-reward-model-tiny-llama-chat-rlhf-lora
+  --wandb_project tinyalpaca-reward-model-tiny-llama-chat-rlhf \
+  --wandb_run_name tinyalpaca-reward-model-tiny-llama-chat-rlhf-lora
