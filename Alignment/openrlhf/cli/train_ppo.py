@@ -168,7 +168,7 @@ def train(args):
     max_steps = math.ceil(args.num_episodes * num_update_steps_per_episodes)
 
     actor_scheduler = get_scheduler(
-        "cosine_with_min_lr",
+        "constant",
         actor_optim,
         num_warmup_steps=math.ceil(max_steps * 0.03),
         num_training_steps=max_steps,
@@ -176,7 +176,7 @@ def train(args):
     )
 
     critic_scheduler = get_scheduler(
-        "cosine_with_min_lr",
+        "constant",
         critic_optim,
         num_warmup_steps=math.ceil(max_steps * 0.03),
         num_training_steps=max_steps,
