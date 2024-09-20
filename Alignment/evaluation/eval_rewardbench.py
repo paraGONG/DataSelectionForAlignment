@@ -13,7 +13,6 @@ from transformers import AutoTokenizer, AutoConfig, AutoModel
 import rewardbench
 
 from utils import load_eval_dataset, calculate_scores_per_section, EXAMPLE_COUNTS, SUBSET_MAPPING, _get_reward_model, RewardPipeline, check_tokenizer_chat_template
-from openrlhf.models import get_llm_for_sequence_regression
 
 
 def main():
