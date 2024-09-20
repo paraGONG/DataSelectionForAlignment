@@ -503,7 +503,6 @@ def _get_reward_model(base_pretrained_model, base_llm_model, value_head_prefix="
             )
             last_hidden_states = outputs["last_hidden_state"]
             values = getattr(self, self.value_head_prefix)(last_hidden_states).squeeze(-1)
-            print(values.device)
             if self.packing_samples:
                 reward = values
             else:
@@ -546,7 +545,7 @@ class RewardPipeline:
             padding=padding,
             return_tensors="pt",
         ).to("cuda")
-
+        print(inputs.device)
         if self.tokenizer.bos_token:
             bos_token_id = self.tokenizer.bos_token_id
             input_ids = inputs["input_ids"]
