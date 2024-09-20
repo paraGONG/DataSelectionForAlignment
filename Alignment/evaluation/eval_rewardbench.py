@@ -97,7 +97,7 @@ def main():
         args.model,
         trust_remote_code=True,
         torch_dtype=torch.bfloat16,
-        device_map='auto',
+        device_map='cuda:0',
     )
 
     reward_pipe = RewardPipeline(

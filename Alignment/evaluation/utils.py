@@ -550,7 +550,6 @@ class RewardPipeline:
             bos_token_id = self.tokenizer.bos_token_id
             input_ids = inputs["input_ids"]
             attention_mask = inputs["attention_mask"]
-            print(input_ids.device)
             # Ensure input_ids is 2D
             if input_ids.dim() == 1:
                 input_ids = input_ids.unsqueeze(0)
