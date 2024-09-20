@@ -99,8 +99,6 @@ def main():
         torch_dtype=torch.bfloat16,
         device_map='auto',
     )
-    device = next(model.parameters()).device
-    print(f"Model is on device: {device}")
 
     reward_pipe = RewardPipeline(
             model=model,
@@ -128,6 +126,9 @@ def main():
     model = accelerator.prepare(reward_pipe.model)
     reward_pipe.model = model
 
+    device = next(model.parameters()).device
+    print(f"Model is on device: {device}")
+    
     ###############
     # Run inference
     ###############
