@@ -88,9 +88,9 @@ def main():
         "return_token_type_ids": False,
     }
     model_kwargs = {"device_map": "auto"}
+    config = AutoConfig.from_pretrained(args.model, trust_remote_code=True)
     base_class = AutoModel._model_mapping[type(config)]
     base_pretrained_class = base_class.__base__
-    config = AutoConfig.from_pretrained(args.model, trust_remote_code=True)
     cls_class = _get_reward_model(base_pretrained_class, base_class)
 
     model = cls_class.from_pretrained(
