@@ -539,6 +539,7 @@ class RewardPipeline:
         truncation = kwargs.get("truncation", True)
         padding = kwargs.get("padding", True)
         max_length = kwargs.get("max_length", 2048)
+        print(samples)
         inputs = self.tokenizer(
             samples,
             truncation=truncation,
@@ -549,10 +550,11 @@ class RewardPipeline:
 
 
         if self.tokenizer.bos_token:
-            print('ues here bos')
             bos_token_id = self.tokenizer.bos_token_id
             input_ids = inputs["input_ids"]
             attention_mask = inputs["attention_mask"]
+            print(input_ids)
+            print(attention_mask)
 
             # Ensure input_ids is 2D
             if input_ids.dim() == 1:
@@ -574,6 +576,7 @@ class RewardPipeline:
                     torch.arange(attention_mask.size(0), device=attention_mask.device)[double_bos_mask],
                     seq_starts[double_bos_mask],
                 ] = torch.tensor(0, device=attention_mask.device)
+            print(attention_mask)
 
         with torch.no_grad():
             outputs = self.model(**inputs)
