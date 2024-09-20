@@ -99,6 +99,8 @@ def main():
         torch_dtype=torch.bfloat16,
         device_map='auto',
     )
+    device = next(model.parameters()).device
+    print(f"Model is on device: {device}")
 
     reward_pipe = RewardPipeline(
             model=model,
