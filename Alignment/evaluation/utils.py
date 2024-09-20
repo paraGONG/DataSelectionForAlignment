@@ -535,8 +535,15 @@ class RewardPipeline:
         self.tokenizer = tokenizer
 
     def __call__(self, samples, return_inputs=False, **kwargs):
+        _ = kwargs.get("batch_size", 1)
+        truncation = kwargs.get("truncation", True)
+        padding = kwargs.get("padding", True)
+        max_length = kwargs.get("max_length", 2048)
         inputs = self.tokenizer(
             samples,
+            truncation=truncation,
+            max_length=max_length,
+            padding=padding,
             return_tensors="pt",
         ).to("cuda")
 
