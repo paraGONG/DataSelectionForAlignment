@@ -126,9 +126,6 @@ def main():
     model = accelerator.prepare(reward_pipe.model)
     reward_pipe.model = model
 
-    device = next(model.parameters()).device
-    print(f"Model is on device: {device}")
-    
     ###############
     # Run inference
     ###############
