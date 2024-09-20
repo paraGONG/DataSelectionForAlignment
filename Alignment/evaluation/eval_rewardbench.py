@@ -10,7 +10,6 @@ from accelerate import Accelerator
 from accelerate.logging import get_logger
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoConfig, AutoModel
-import rewardbench
 
 from utils import load_eval_dataset, calculate_scores_per_section, EXAMPLE_COUNTS, SUBSET_MAPPING, _get_reward_model, RewardPipeline, check_tokenizer_chat_template
 
