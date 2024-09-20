@@ -508,7 +508,6 @@ def _get_reward_model(base_pretrained_model, base_llm_model, value_head_prefix="
                 reward = values
             else:
                 eos_indices = attention_mask.size(1) - 1 - attention_mask.long().fliplr().argmax(dim=1, keepdim=True)
-                print(eos_indices.device)
                 reward = values.gather(dim=1, index=eos_indices).squeeze(1)
 
             if not self.training and self.normalize_reward:
@@ -550,6 +549,7 @@ class RewardPipeline:
 
 
         if self.tokenizer.bos_token:
+            print('ues here bos')
             bos_token_id = self.tokenizer.bos_token_id
             input_ids = inputs["input_ids"]
             attention_mask = inputs["attention_mask"]
