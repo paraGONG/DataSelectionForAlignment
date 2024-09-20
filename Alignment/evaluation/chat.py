@@ -8,8 +8,7 @@ while True:
     template = "User: {}\nAssistant: "
     prompt = input()
     prompt = template.format(prompt)
-    print(prompt)
     input_ids = tokenizer.encode(prompt, return_tensors='pt').cuda()
-    output_ids = model.generate(input_ids, max_new_tokens=64)[0]
+    output_ids = model.generate(input_ids, max_new_tokens=128)[0]
 
     print(tokenizer.decode(output_ids, skip_special_tokens=True))
