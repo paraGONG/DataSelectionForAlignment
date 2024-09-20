@@ -19,6 +19,7 @@ def main():
     parser.add_argument("--dataset", type=str, default="allenai/reward-bench", help="The dataset to evaluate on.")
     parser.add_argument("--model", type=str, required=True, help="The model to evaluate.")
     parser.add_argument("--batch_size", type=int, default=8, help="The batch size to use.")
+    parser.add_argument("--debug", action="store_true", default=False, help="Debug mode.")
 
     parser.add_argument(
         "--chat_template",
