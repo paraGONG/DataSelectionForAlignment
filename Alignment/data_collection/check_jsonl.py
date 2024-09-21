@@ -1,6 +1,6 @@
 import json
 
-jsonl_file = '../my_dataset/PKU-SafeRLHF.jsonl'
+jsonl_file = '../my_dataset/ultrachat.jsonl'
 
 data_count = 0
 first_ten_rows = []
