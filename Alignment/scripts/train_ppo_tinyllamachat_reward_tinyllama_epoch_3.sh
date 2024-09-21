@@ -16,7 +16,7 @@ deepspeed --module openrlhf.cli.train_ppo \
   --generate_max_len 1024 \
   --zero_stage 0 \
   --bf16 \
-  --actor_learning_rate 5e-7 \
+  --actor_learning_rate 1e-5 \
   --critic_learning_rate 9e-6 \
   --init_kl_coef 0.01 \
   --prompt_data PKU-Alignment/PKU-SafeRLHF-prompt \
