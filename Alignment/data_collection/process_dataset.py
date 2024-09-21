@@ -7,7 +7,7 @@ dataset = load_dataset(dataset_path)
 dataset_name = dataset_path.split('/')[-1]
 
 output_file = f'../my_dataset/{dataset_name}.jsonl'
-os.makedirs(output_file, exist_ok=True)
+os.makedirs('../my_dataset', exist_ok=True)
 
 seen_questions = set()
 
