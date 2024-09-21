@@ -1,6 +1,6 @@
 import json
 
-jsonl_file = '../my_dataset/hh-rlhf-train.jsonl'
+jsonl_file = '../my_dataset/hh-rlhf-test.jsonl'
 
 data_count = 0
 first_ten_rows = []

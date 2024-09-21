@@ -10,7 +10,7 @@ dataset_path = 'Anthropic/hh-rlhf'
 dataset = load_dataset(dataset_path)
 dataset_name = dataset_path.split('/')[-1]
 
-output_file = f'../my_dataset/{dataset_name}-train.jsonl'
+output_file = f'../my_dataset/{dataset_name}-test.jsonl'
 os.makedirs('../my_dataset', exist_ok=True)
 
 seen_questions = set()
@@ -18,7 +18,7 @@ seen_questions = set()
 pattern = r"Human: (.*?)Assistant"
 
 with open(output_file, 'w', encoding='utf-8') as f:
-    for row in dataset['train']:
+    for row in dataset['test']:
         prompt = row['chosen']
         match = re.search(pattern, prompt, re.DOTALL)
         prompt = match.group(1).strip('\n')
