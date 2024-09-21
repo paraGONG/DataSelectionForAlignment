@@ -13,9 +13,10 @@ seen_questions = set()
 
 with open(output_file, 'w', encoding='utf-8') as f:
     for row in dataset:
+        print(row)
+        break
         prompt = row['data'][0]
         if prompt not in seen_questions:
-            # 如果是新问题，处理并保存
             seen_questions.add(prompt)
         data = {
             "prompt": prompt,
