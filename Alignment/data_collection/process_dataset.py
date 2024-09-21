@@ -12,7 +12,7 @@ os.makedirs('../my_dataset', exist_ok=True)
 seen_questions = set()
 
 with open(output_file, 'w', encoding='utf-8') as f:
-    for row in dataset:
+    for row in dataset['train']:
         print(row)
         break
         prompt = row['data'][0]
