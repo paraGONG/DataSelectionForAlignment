@@ -20,6 +20,8 @@ pattern = r"Human: (.*?) Assistant"
 with open(output_file, 'w', encoding='utf-8') as f:
     for row in dataset['train']:
         prompt = row['chosen']
+        print(prompt)
+        break
         match = re.search(pattern, prompt, re.DOTALL)
         prompt = match.group(1)
         if prompt not in seen_questions:
