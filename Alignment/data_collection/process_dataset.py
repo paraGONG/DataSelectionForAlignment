@@ -17,8 +17,8 @@ with open(output_file, 'w', encoding='utf-8') as f:
         prompt = row['prompt']
         if prompt not in seen_questions:
             seen_questions.add(prompt)
-        data = {
-            "prompt": prompt,
-            "source": dataset_name
-        }
-        f.write(json.dumps(data, ensure_ascii=False) + '\n')
+            data = {
+                "prompt": prompt,
+                "source": dataset_name
+            }
+            f.write(json.dumps(data, ensure_ascii=False) + '\n')
