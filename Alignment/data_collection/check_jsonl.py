@@ -1,6 +1,6 @@
 import json
 
-jsonl_file = '../my_dataset/ultrachat.jsonl'
+jsonl_file = '../my_dataset/UltraInteract_pair.jsonl'
 
 data_count = 0
 first_ten_rows = []
