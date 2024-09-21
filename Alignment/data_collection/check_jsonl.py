@@ -1,6 +1,6 @@
 import json
 
-jsonl_file = '../my_dataset/HelpSteer-train.jsonl'
+jsonl_file = '../my_dataset/HelpSteer-validation.jsonl'
 
 data_count = 0
 first_ten_rows = []
@@ -13,10 +13,11 @@ with open(jsonl_file, 'r', encoding='utf-8') as f:
         if data_count <= 10:
             first_ten_rows.append(data)
 
-# 打印统计结果
-print(f"总共有 {data_count} 条数据。")
 
 # 打印前10条数据
 print("前10条数据:")
 for idx, row in enumerate(first_ten_rows, 1):
     print(f"第 {idx} 条: {json.dumps(row, ensure_ascii=False, indent=4)}")
+
+# 打印统计结果
+print(f"总共有 {data_count} 条数据。")
