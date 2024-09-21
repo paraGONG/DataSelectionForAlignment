@@ -27,6 +27,8 @@ deepspeed --module openrlhf.cli.train_ppo \
   --lora_rank 8 \
   --lora_alpha 16 \
   --target_modules q_proj v_proj \
+  --flash_attn \
+  --gradient_checkpointing \
   --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
   --wandb_project llama3sft-reward-model-llama3rm-rlhf \
   --wandb_run_name llama3sft-reward-model-llama3rm-rlhf-lora
