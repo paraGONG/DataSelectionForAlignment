@@ -1,11 +1,14 @@
-from datasets import load_dataset
+import os
 import json
+from datasets import load_dataset
 
 dataset_path = 'stingning/ultrachat'
 dataset = load_dataset(dataset_path)
 dataset_name = dataset_path.split('/')[-1]
 
 output_file = f'../my_dataset/{dataset_name}.jsonl'
+os.makedirs(output_file, exist_ok=True)
+
 seen_questions = set()
 
 with open(output_file, 'w', encoding='utf-8') as f:
