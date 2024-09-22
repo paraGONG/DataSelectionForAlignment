@@ -36,7 +36,7 @@ def merge_and_shuffle_jsonl(files_with_samples, output_file):
 # 示例：指定每个文件和从中提取的样本数
 files_with_samples = [
     ('../my_dataset/ultrachat.jsonl', 30000),  # 从 file1.jsonl 中随机挑选 100 条数据
-    ('../my_dataset/HelpSteer-trai.jsonl', 10000),  # 从 file2.jsonl 中随机挑选 150 条数据
+    ('../my_dataset/HelpSteer-train.jsonl', 10000),  # 从 file2.jsonl 中随机挑选 150 条数据
     ('../my_dataset/UltraInteract_pair.jsonl', 20000),
     ('../my_dataset/hh-rlhf-train.jsonl', 20000),
     ('../my_dataset/PKU-SafeRLHF.jsonl', 20000),
