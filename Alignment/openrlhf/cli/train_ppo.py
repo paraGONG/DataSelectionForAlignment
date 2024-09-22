@@ -337,7 +337,6 @@ if __name__ == "__main__":
     parser.add_argument("--actor_lora_dropout", type=float, default=0)
 
     # Critic Lora
-    parser.add_argument("--load_in_4bit", action="store_true", default=False)
     parser.add_argument("--critic_lora_rank", type=int, default=0)
     parser.add_argument("--critic_lora_alpha", type=int, default=16)
     parser.add_argument("--critic_target_modules", type=str, nargs="*", default=None)
