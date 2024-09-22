@@ -1,6 +1,6 @@
 import json
 
-jsonl_file = '../my_dataset/hh-rlhf-test.jsonl'
+jsonl_file = '../rlhf_prompt_collection_v1.0/data.jsonl'
 
 data_count = 0
 first_ten_rows = []
