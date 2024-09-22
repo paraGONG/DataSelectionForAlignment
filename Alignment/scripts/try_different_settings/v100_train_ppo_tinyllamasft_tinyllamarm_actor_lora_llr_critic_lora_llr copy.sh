@@ -1,0 +1,34 @@
+export CUDA_VISIBLE_DEVICES=4,5,6,7
+
+deepspeed --module openrlhf.cli.train_ppo \
+  --pretrain  /data2/yifan/models/TinyLlama-1.1B-Chat-v1.0 \
+  --reward_pretrain /data2/yifan/models/TinyLlama-1.1B-Chat-v1.0-reward-model \
+  --save_path ../checkpoint/v100_tinyllamasft-tinyllamarm-rlhf-actor-lora-llr-critic-lora-llr \
+  --ckpt_path  ../ckpt/v100_tinyllamasft-tinyllamarm-rlhf-actor-lora-llr-critic-lora-llr \
+  --save_steps 1 \
+  --max_ckpt_num 5 \
+  --logging_steps 1 \
+  --eval_steps -1 \
+  --micro_train_batch_size 2 \
+  --train_batch_size 128 \
+  --micro_rollout_batch_size 4 \
+  --rollout_batch_size 512 \
+  --max_epochs 2 \
+  --prompt_max_len 1024 \
+  --generate_max_len 1024 \
+  --zero_stage 2 \
+  --actor_learning_rate 5e-4 \
+  --critic_learning_rate 5e-4 \
+  --init_kl_coef 0.01 \
+  --prompt_data /data2/yifan/datasets/rlhf-prompt-collection-v1.0 \
+  --input_key prompt \
+  --input_template "<|user|>\n{}</s>\n<|assistant|>\n" \
+  --max_samples 100000 \
+  --load_checkpoint \
+  --actor_lora_rank 8 \
+  --actor_lora_alpha 16 \
+  --critic_lora_rank 8 \
+  --critic_lora_alpha 16 \
+  --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
+  --wandb_project v100_try_tinyllamasft-tinyllamarm-rlhf-actor-lora-llr-critic-lora-llr \
+  --wandb_run_name v100_try_tinyllamasft-tinyllamarm-rlhf-actor-lora-llr-critic-lora-llr
