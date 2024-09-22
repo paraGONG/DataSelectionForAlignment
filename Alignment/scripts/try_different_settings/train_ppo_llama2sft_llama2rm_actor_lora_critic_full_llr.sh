@@ -1,8 +1,8 @@
 deepspeed --module openrlhf.cli.train_ppo \
   --pretrain  OpenRLHF/Llama-2-7b-sft-model-ocra-500k \
   --reward_pretrain OpenRLHF/Llama-2-7b-rm-anthropic_hh-lmsys-oasst-webgpt \
-  --save_path ../checkpoint/llama2sft-llama2rm-rlhf-actor-lora-critic-lora-llr \
-  --ckpt_path  ../ckpt/llama2sft-llama2rm-rlhf-actor-lora-critic-lora-llr \
+  --save_path ../checkpoint/llama2sft-llama2rm-rlhf-actor-lora-critic-full-llr \
+  --ckpt_path  ../ckpt/llama2sft-llama2rm-rlhf-actor-lora-critic-full-llr \
   --save_steps 10 \
   --max_ckpt_num 500 \
   --logging_steps 1 \
@@ -30,4 +30,4 @@ deepspeed --module openrlhf.cli.train_ppo \
   --gradient_checkpointing \
   --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
   --wandb_project try_llama2sft-llama2rm-rlhf \
-  --wandb_run_name try_llama2sft-llama2rm-rlhf-actor-lora-critic-lora-llr
+  --wandb_run_name try_llama2sft-llama2rm-rlhf-actor-lora-critic-full-llr
