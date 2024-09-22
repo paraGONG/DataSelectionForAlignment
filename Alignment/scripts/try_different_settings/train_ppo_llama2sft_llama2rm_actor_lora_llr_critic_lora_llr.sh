@@ -31,5 +31,5 @@ deepspeed --module openrlhf.cli.train_ppo \
   --flash_attn \
   --gradient_checkpointing \
   --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
-  --wandb_project try_llama2sft-llama2rm-rlhf \
+  --wandb_project try_llama2sft-llama2rm-rlhf-actor-lora-llr-critic-lora-llr \
   --wandb_run_name try_llama2sft-llama2rm-rlhf-actor-lora-llr-critic-lora-llr
