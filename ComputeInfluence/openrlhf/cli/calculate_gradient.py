@@ -71,8 +71,8 @@ def train(args):
     tokenizer = get_tokenizer(args.pretrain, actor.model, "left", strategy, use_fast=not args.disable_fast_tokenizer)
     get_tokenizer(args.critic_pretrain, critic, "left", strategy, use_fast=not args.disable_fast_tokenizer)
 
-    # strategy.print(actor)
-    # strategy.print(critic)
+    strategy.print(actor)
+    strategy.print(critic)
 
     # load weights for reference actor
     initial_model = Actor(
