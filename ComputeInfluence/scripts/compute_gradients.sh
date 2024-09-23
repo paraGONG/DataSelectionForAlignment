@@ -1,38 +1,53 @@
-set -x
+deepspeed --module openrlhf.cli.train_ppo \
+  --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
+  --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
+  --save_path ../tinyllama_gradientsd \
+  --ckpt_path yifangong/tinyllama-ppo-ckpt \
+  --ckpt_tag global_step10 \
+  --micro_train_batch_size 1 \
+  --train_batch_size 1 \
+  --micro_rollout_batch_size 1 \
+  --rollout_batch_size 1 \
+  --max_epochs 1 \
+  --prompt_max_len 1024 \
+  --generate_max_len 1024 \
+  --zero_stage 0 \
+  --bf16 \
+  --actor_learning_rate 5e-4 \
+  --critic_learning_rate 5e-4 \
+  --init_kl_coef 0.01 \
+  --prompt_data yifangong/rlhf-prompt-collection-v1.0 \
+  --input_key prompt \
+  --input_template "<|user|>\n{}</s>\n<|assistant|>\n" \
+  --max_samples 100000 \
+  --load_checkpoint \
+  --actor_lora_rank 8 \
+  --actor_lora_alpha 16 \
+  --critic_lora_rank 8 \
+  --critic_lora_alpha 16 \
+  --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
+  --wandb_project compute-gradient \
+  --wandb_run_name compute-gradient
 
-read -r -d '' training_commands <<EOF
-openrlhf.cli.calculate_gradient \
-   --pretrain /root/siton-object-46b8630eb56e449886cb89943ab6fe10/models/TinyLlama/TinyLlama_v1.1 \
-   --reward_pretrain /root/siton-object-46b8630eb56e449886cb89943ab6fe10/DataSelectionForAlignment/checkpoint/tinyllama-rm \
-   --save_path ./checkpoint/tinyllama-rlhf \
-   --micro_train_batch_size 1 \
-   --train_batch_size 1 \
-   --micro_rollout_batch_size 1 \
-   --rollout_batch_size 1 \
-   --max_epochs 1 \
-   --prompt_max_len 512 \
-   --generate_max_len 512 \
-   --zero_stage 0 \
-   --actor_learning_rate 5e-7 \
-   --critic_learning_rate 9e-6 \
-   --init_kl_coef 0.01 \
-   --prompt_data /root/siton-object-46b8630eb56e449886cb89943ab6fe10/dataset/OpenRLHF/prompt-collection-v0.1 \
-   --input_key context_messages \
-   --apply_chat_template \
-   --max_samples 100000 \
-   --actor_lora_rank 8 \
-   --actor_lora_alpha 16 \
-   --load_checkpoint
-EOF
-#    --pretrain /root/siton-object-46b8630eb56e449886cb89943ab6fe10/models/TinyLlama/TinyLlama_v1.1 \ 
-
-#    --lora_rank 8 \
-#    --lora_alpha 16 \
-#    --target_modules q_proj v_proj
-    # --use_wandb [WANDB_TOKENS] or True (use wandb login command)
-    # --remote_rm_url http://localhost:5000/get_reward
-
-if [[ ${1} != "slurm" ]]; then
-    deepspeed --module $training_commands
-fi
-  
+# openrlhf.cli.calculate_gradient \
+#    --pretrain /root/siton-object-46b8630eb56e449886cb89943ab6fe10/models/TinyLlama/TinyLlama_v1.1 \
+#    --reward_pretrain /root/siton-object-46b8630eb56e449886cb89943ab6fe10/DataSelectionForAlignment/checkpoint/tinyllama-rm \
+#    --save_path ./checkpoint/tinyllama-rlhf \
+#    --micro_train_batch_size 1 \
+#    --train_batch_size 1 \
+#    --micro_rollout_batch_size 1 \
+#    --rollout_batch_size 1 \
+#    --max_epochs 1 \
+#    --prompt_max_len 512 \
+#    --generate_max_len 512 \
+#    --zero_stage 0 \
+#    --actor_learning_rate 5e-7 \
+#    --critic_learning_rate 9e-6 \
+#    --init_kl_coef 0.01 \
+#    --prompt_data /root/siton-object-46b8630eb56e449886cb89943ab6fe10/dataset/OpenRLHF/prompt-collection-v0.1 \
+#    --input_key context_messages \
+#    --apply_chat_template \
+#    --max_samples 100000 \
+#    --actor_lora_rank 8 \
+#    --actor_lora_alpha 16 \
+#    --load_checkpoint
