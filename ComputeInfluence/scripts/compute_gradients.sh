@@ -25,9 +25,6 @@ deepspeed --module openrlhf.cli.calculate_gradient \
   --actor_lora_alpha 16 \
   --critic_lora_rank 8 \
   --critic_lora_alpha 16 \
-  --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
-  --wandb_project compute-gradient \
-  --wandb_run_name compute-gradient
 
 # openrlhf.cli.calculate_gradient \
 #    --pretrain /root/siton-object-46b8630eb56e449886cb89943ab6fe10/models/TinyLlama/TinyLlama_v1.1 \
