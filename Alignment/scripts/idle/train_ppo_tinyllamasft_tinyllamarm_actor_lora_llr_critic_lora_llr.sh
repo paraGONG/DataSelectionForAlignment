@@ -1,8 +1,8 @@
 deepspeed --module openrlhf.cli.train_ppo \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
-  --save_path ../checkpoint/tinyllamasft-tinyllamarm-rlhf-actor-lora-llr-critic-lora-llr \
-  --ckpt_path  ../ckpt/tinyllamasft-tinyllamarm-rlhf-actor-lora-llr-critic-lora-llr \
+  --save_path ../checkpoint/idle \
+  --ckpt_path  ../ckpt/idle \
   --save_steps 10 \
   --max_ckpt_num 500 \
   --logging_steps 1 \
