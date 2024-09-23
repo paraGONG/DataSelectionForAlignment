@@ -192,8 +192,8 @@ class GradientCalculator(ABC):
         dataloader = DataLoader(
             self.replay_buffer,
             batch_size=self.replay_buffer.sample_batch_size,
-            shuffle=True,
-            drop_last=True,
+            shuffle=False,
+            drop_last=False,
             pin_memory=self.dataloader_pin_memory,
             collate_fn=self.replay_buffer.collate_fn,
         )
@@ -256,7 +256,7 @@ class GradientCalculator(ABC):
         status = self.training_step_actor(experience)
         return status
 
-    def training_step_actor(self, experience: Experience) -> Dict[str, float]:
+    def  _actor(self, experience: Experience) -> Dict[str, float]:
         self.actor.train()
 
         num_actions = experience.action_mask.size(1)
@@ -280,7 +280,6 @@ class GradientCalculator(ABC):
         file_count = len(existing_files)
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
         torch.save(vectorized_grads, f"./grads/test_gradients{file_count}.pt")
-        print("gradients saved!")
         # clear gradient
         self.actor_optim.zero_grad()
 

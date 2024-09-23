@@ -354,7 +354,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--prompt_data_probs",
         type=str,
-        default="1.0",
+        default=None,
         help="sampling probs for datasets",
     )
     parser.add_argument("--prompt_split", type=str, default="train")

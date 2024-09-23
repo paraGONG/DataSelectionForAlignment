@@ -26,10 +26,10 @@ def train(args):
         use_flash_attention_2=args.flash_attn,
         bf16=args.bf16,
         load_in_4bit=args.load_in_4bit,
-        lora_rank=args.lora_rank,
-        lora_alpha=args.lora_alpha,
+        lora_rank=args.actor_lora_rank,
+        lora_alpha=args.actor_lora_alpha,
         target_modules=args.target_modules,
-        lora_dropout=args.lora_dropout,
+        lora_dropout=args.actor_lora_dropout,
         ds_config=strategy.get_ds_train_config(is_actor=True),
     )
 
@@ -43,10 +43,10 @@ def train(args):
         use_flash_attention_2=args.flash_attn,
         bf16=args.bf16,
         load_in_4bit=args.load_in_4bit,
-        lora_rank=args.lora_rank,
-        lora_alpha=args.lora_alpha,
+        lora_rank=args.critic_lora_rank,
+        lora_alpha=args.critic_lora_alpha,
         target_modules=args.target_modules,
-        lora_dropout=args.lora_dropout,
+        lora_dropout=args.critic_lora_dropout,
         ds_config=strategy.get_ds_train_config(is_actor=False),
         value_head_prefix=args.value_head_prefix,
         init_value_head=strategy.args.pretrain == strategy.args.critic_pretrain,
@@ -66,13 +66,13 @@ def train(args):
     
     strategy.print("reward normalization status: {}".format(args.normalize_reward))
     strategy.print("mean: {}, std {}".format(critic.mean, critic.std))
-
+ 
     # configure tokenizer
     tokenizer = get_tokenizer(args.pretrain, actor.model, "left", strategy, use_fast=not args.disable_fast_tokenizer)
     get_tokenizer(args.critic_pretrain, critic, "left", strategy, use_fast=not args.disable_fast_tokenizer)
 
-    strategy.print(actor)
-    strategy.print(critic)
+    # strategy.print(actor)
+    # strategy.print(critic)
 
     # load weights for reference actor
     initial_model = Actor(
@@ -111,18 +111,19 @@ def train(args):
         return_eval=False,
         train_split=args.prompt_split,
     )
-    prompts_data = prompts_data.select(range(min(args.max_samples, len(prompts_data))))
+    # prompts_data = prompts_data.select(range(min(args.max_samples, len(prompts_data))))
     prompts_dataset = PromptDataset(prompts_data, tokenizer, strategy, input_template=args.input_template)
 
     # prepare dataloader
-    prompts_dataloader = strategy.setup_dataloader(prompts_dataset, args.micro_rollout_batch_size, True, True)
+    # For DataSelection, shuffle = False, drop_last = False
+    prompts_dataloader = strategy.setup_dataloader(prompts_dataset, args.micro_rollout_batch_size, True, shuffle=False, drop_last=False)
 
     # configure scheduler
     num_update_steps_per_episodes = len(prompts_dataset) // args.train_batch_size * args.max_epochs
     max_steps = math.ceil(args.num_episodes * num_update_steps_per_episodes)
 
     actor_scheduler = get_scheduler(
-        "cosine_with_min_lr",
+        "constant",
         actor_optim,
         num_warmup_steps=math.ceil(max_steps * 0.03),
         num_training_steps=max_steps,
@@ -130,7 +131,7 @@ def train(args):
     )
 
     critic_scheduler = get_scheduler(
-        "cosine_with_min_lr",
+        "constant",
         critic_optim,
         num_warmup_steps=math.ceil(max_steps * 0.03),
         num_training_steps=max_steps,
@@ -254,11 +255,18 @@ if __name__ == "__main__":
     parser.add_argument("--disable_fast_tokenizer", action="store_true", default=False)
 
     # LoRA
+    # Actor Lora
     parser.add_argument("--load_in_4bit", action="store_true", default=False)
-    parser.add_argument("--lora_rank", type=int, default=0)
-    parser.add_argument("--lora_alpha", type=int, default=16)
-    parser.add_argument("--target_modules", type=str, nargs="*", default="all-linear")
-    parser.add_argument("--lora_dropout", type=float, default=0)
+    parser.add_argument("--actor_lora_rank", type=int, default=0)
+    parser.add_argument("--actor_lora_alpha", type=int, default=16)
+    parser.add_argument("--actor_target_modules", type=str, nargs="*", default=None)
+    parser.add_argument("--actor_lora_dropout", type=float, default=0)
+
+    # Critic Lora
+    parser.add_argument("--critic_lora_rank", type=int, default=0)
+    parser.add_argument("--critic_lora_alpha", type=int, default=16)
+    parser.add_argument("--critic_target_modules", type=str, nargs="*", default=None)
+    parser.add_argument("--critic_lora_dropout", type=float, default=0)
 
     # Models
     parser.add_argument("--pretrain", type=str, default=None, help="HF model name or path")
@@ -271,7 +279,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--prompt_data_probs",
         type=str,
-        default="1.0",
+        default=None,
         help="sampling probs for datasets",
     )
     parser.add_argument("--prompt_split", type=str, default="train")

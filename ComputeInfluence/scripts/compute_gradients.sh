@@ -20,10 +20,8 @@ openrlhf.cli.calculate_gradient \
    --input_key context_messages \
    --apply_chat_template \
    --max_samples 100000 \
-   --normalize_reward \
-   --lora_rank 8 \
-   --lora_alpha 16 \
-   --target_modules q_proj v_proj \
+   --actor_lora_rank 8 \
+   --actor_lora_alpha 16 \
    --load_checkpoint
 EOF
 #    --pretrain /root/siton-object-46b8630eb56e449886cb89943ab6fe10/models/TinyLlama/TinyLlama_v1.1 \ 
