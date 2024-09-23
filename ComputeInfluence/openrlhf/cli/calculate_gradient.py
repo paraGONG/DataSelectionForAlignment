@@ -28,7 +28,7 @@ def train(args):
         load_in_4bit=args.load_in_4bit,
         lora_rank=args.actor_lora_rank,
         lora_alpha=args.actor_lora_alpha,
-        target_modules=args.target_modules,
+        target_modules=args.actor_target_modules,
         lora_dropout=args.actor_lora_dropout,
         ds_config=strategy.get_ds_train_config(is_actor=True),
     )
@@ -45,7 +45,7 @@ def train(args):
         load_in_4bit=args.load_in_4bit,
         lora_rank=args.critic_lora_rank,
         lora_alpha=args.critic_lora_alpha,
-        target_modules=args.target_modules,
+        target_modules=args.critic_target_modules,
         lora_dropout=args.critic_lora_dropout,
         ds_config=strategy.get_ds_train_config(is_actor=False),
         value_head_prefix=args.value_head_prefix,
