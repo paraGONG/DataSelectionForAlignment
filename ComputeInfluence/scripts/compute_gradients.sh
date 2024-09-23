@@ -1,4 +1,4 @@
-deepspeed --module openrlhf.cli.train_ppo \
+deepspeed --module openrlhf.cli.calculate_gradient \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
   --save_path ../tinyllama_gradientsd \
