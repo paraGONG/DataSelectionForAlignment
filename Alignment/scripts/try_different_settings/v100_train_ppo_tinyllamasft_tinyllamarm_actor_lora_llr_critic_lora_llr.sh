@@ -1,12 +1,10 @@
-export CUDA_VISIBLE_DEVICES=4,5,6,7
-
-deepspeed --module openrlhf.cli.train_ppo \
+deepspeed --include localhost:4,5,6,7 --module openrlhf.cli.train_ppo \
   --pretrain  /data2/yifan/models/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain /data2/yifan/models/TinyLlama-1.1B-Chat-v1.0-reward-model \
   --save_path ../checkpoint/v100_tinyllamasft-tinyllamarm-rlhf-actor-lora-llr-critic-lora-llr \
   --ckpt_path  ../ckpt/v100_tinyllamasft-tinyllamarm-rlhf-actor-lora-llr-critic-lora-llr \
-  --save_steps 1 \
-  --max_ckpt_num 5 \
+  --save_steps 2 \
+  --max_ckpt_num 10 \
   --logging_steps 1 \
   --eval_steps -1 \
   --micro_train_batch_size 2 \
