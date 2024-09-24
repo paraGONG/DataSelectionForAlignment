@@ -9,7 +9,7 @@ api = HfApi()
 for i in range(10):
     # 创建仓库
     repo_id = f'yifangong/split_candidate_dataset_part_{i}'
-    api.create_repo(repo_id=repo_id, repo_type='dataset', private=False)
+    # api.create_repo(repo_id=repo_id, repo_type='dataset', private=False)
 
     # 上传 JSONL 文件
     api.upload_file(
