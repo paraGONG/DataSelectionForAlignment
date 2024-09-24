@@ -1,7 +1,7 @@
 from huggingface_hub import HfApi, HfFolder
 
 # 登录 Hugging Face
-HfFolder.save_token('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')
+# HfFolder.save_token('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')
 
 # 创建 API 实例
 api = HfApi()
