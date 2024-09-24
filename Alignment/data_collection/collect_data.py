@@ -35,17 +35,17 @@ def merge_and_shuffle_jsonl(files_with_samples, output_file):
 
 # 示例：指定每个文件和从中提取的样本数
 files_with_samples = [
-    ('../my_dataset/ultrachat.jsonl', 30000),  # 从 file1.jsonl 中随机挑选 100 条数据
-    ('../my_dataset/HelpSteer-train.jsonl', 10000),  # 从 file2.jsonl 中随机挑选 150 条数据
-    ('../my_dataset/UltraInteract_pair.jsonl', 20000),
-    ('../my_dataset/hh-rlhf-train.jsonl', 20000),
-    ('../my_dataset/PKU-SafeRLHF.jsonl', 20000),
+    ('../my_dataset/ultrachat.jsonl', 10240),  # 从 file1.jsonl 中随机挑选 100 条数据
+    ('../my_dataset/HelpSteer-train.jsonl', 10240),  # 从 file2.jsonl 中随机挑选 150 条数据
+    ('../my_dataset/UltraInteract_pair.jsonl', 10240),
+    ('../my_dataset/hh-rlhf-train.jsonl', 10240),
+    ('../my_dataset/PKU-SafeRLHF.jsonl', 10240),
 ]
 
-os.makedirs('../rlhf_prompt_collection_v1.0', exist_ok=True)
+os.makedirs('../rlhf_prompt_collection_5w', exist_ok=True)
 
 # 输出文件路径
-output_file = '../rlhf_prompt_collection_v1.0/data.jsonl'
+output_file = '../rlhf_prompt_collection_5w.jsonl'
 
 # 执行合并和随机打乱操作
 merge_and_shuffle_jsonl(files_with_samples, output_file)
