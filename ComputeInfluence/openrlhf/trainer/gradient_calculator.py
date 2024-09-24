@@ -280,10 +280,12 @@ class GradientCalculator(ABC):
         existing_files = os.listdir("./grads")
         file_count = len(existing_files)
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
-        torch.save(vectorized_grads, f"./grads/test_gradients{file_count}.pt")
+        torch.save(vectorized_grads, f"./grads/test_gradients_{file_count}.pt")
         print('gradient saved!')
         # clear gradient
-        self.actor_optim.zero_grad()
+        self.actor_optim.clear_hp_grads()
+        self.actor_optim.clear_lp_grads()
+        # self.actor_optim.zero_grad()
 
         # status
         status = {"policy_loss": actor_loss.item(), "actor_lr": self.actor_scheduler.get_last_lr()[0]}
