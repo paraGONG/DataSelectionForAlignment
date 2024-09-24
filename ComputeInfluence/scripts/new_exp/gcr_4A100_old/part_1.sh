@@ -1,4 +1,4 @@
-deepspeed --include localhost:1 --hostfile=None --master_port 29501 --module openrlhf.cli.calculate_gradient \
+deepspeed --include localhost:1 --master_port 29501 --hostfile=None --module openrlhf.cli.calculate_gradient \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
   --save_path ../tinyllamachat_global_step10_gradients_train_part_1 \
