@@ -23,7 +23,7 @@ for i in range(num_parts):
     
     part_lines = lines[start_index:end_index]
     
-    output_file = f'data_{i}.jsonl'
+    output_file = f'./candidate_dataset/data_{i}.jsonl'
     with open(output_file, 'w') as out_f:
         out_f.writelines(part_lines)
 
