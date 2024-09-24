@@ -150,9 +150,6 @@ class NaiveExperienceMaker(ABC):
             base_action_log_probs,
             action_mask=action_mask,
         )
-        # debug
-        print("kl", kl)
-        print("masked mean kl", masked_mean(kl, action_mask, dim=-1))
 
         advantage, returns = self.get_advantages_and_returns(
             value,

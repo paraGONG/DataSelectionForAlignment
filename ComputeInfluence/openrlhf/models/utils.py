@@ -54,6 +54,12 @@ def compute_reward(
     last_reward = torch.zeros_like(kl).scatter_(dim=1, index=eos_indices, src=r.unsqueeze(1).to(kl.dtype))
 
     reward = last_reward + kl_reward
+
+    # debug
+    print('kl', kl)
+    print('kl_reward', kl_reward)
+    print('last_reward', last_reward)
+    print('reward', reward)
     return reward, kl
 
 
