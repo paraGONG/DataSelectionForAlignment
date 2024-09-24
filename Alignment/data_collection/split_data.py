@@ -4,7 +4,7 @@ import os
 os.makedirs('./candidate_dataset', exist_ok=True)
 
 # 文件名和分割份数
-input_file = 'condidate_dataset.jsonl'
+input_file = 'candidate_dataset.jsonl'
 num_parts = 10
 
 # 读取输入文件
