@@ -296,7 +296,7 @@ class GradientCalculator(ABC):
         self.strategy.backward(loss, self.actor, self.actor_optim)
         # save gradient
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
-        torch.save(vectorized_grads, os.path.join(self.gradients_save_path, "gradient_{global_step}.pt"))
+        torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{global_step}.pt"))
         # clear gradient
         self.actor_optim.clear_hp_grads()
         self.actor_optim.clear_lp_grads()
