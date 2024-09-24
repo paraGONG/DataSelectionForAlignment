@@ -1,7 +1,7 @@
 import json
 import os
 
-os.makedirs('candidate_dataset', exist_ok=True)
+os.makedirs('./candidate_dataset', exist_ok=True)
 
 # 文件名和分割份数
 input_file = 'condidate_dataset.jsonl'
