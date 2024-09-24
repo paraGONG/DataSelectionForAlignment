@@ -280,6 +280,7 @@ class GradientCalculator(ABC):
         file_count = len(existing_files)
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
         torch.save(vectorized_grads, f"./grads/test_gradients{file_count}.pt")
+        print('gradient saved!')
         # clear gradient
         self.actor_optim.zero_grad()
 
