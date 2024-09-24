@@ -11,7 +11,7 @@ deepspeed --module openrlhf.cli.train_ppo \
   --train_batch_size 128 \
   --micro_rollout_batch_size 4 \
   --rollout_batch_size 512 \
-  --max_epochs 2 \
+  --max_epochs 1 \
   --prompt_max_len 1024 \
   --generate_max_len 1024 \
   --zero_stage 0 \
@@ -19,7 +19,7 @@ deepspeed --module openrlhf.cli.train_ppo \
   --actor_learning_rate 5e-4 \
   --critic_learning_rate 5e-4 \
   --init_kl_coef 0.01 \
-  --prompt_data yifangong/rlhf-prompt-collection-v1.0 \
+  --prompt_data yifangong/warmup_dataset \
   --input_key prompt \
   --input_template "<|user|>\n{}</s>\n<|assistant|>\n" \
   --max_samples 100000 \
