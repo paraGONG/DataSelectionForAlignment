@@ -256,7 +256,7 @@ class GradientCalculator(ABC):
         status = self.training_step_actor(experience)
         return status
 
-    def  _actor(self, experience: Experience) -> Dict[str, float]:
+    def training_step_actor(self, experience: Experience) -> Dict[str, float]:
         self.actor.train()
 
         num_actions = experience.action_mask.size(1)
