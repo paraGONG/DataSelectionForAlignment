@@ -64,15 +64,15 @@ def train(args):
     )
     get_tokenizer(args.reward_pretrain, reward_model, "left", strategy, use_fast=not args.disable_fast_tokenizer)
     
-    strategy.print("reward normalization status: {}".format(args.normalize_reward))
-    strategy.print("mean: {}, std {}".format(critic.mean, critic.std))
+    # strategy.print("reward normalization status: {}".format(args.normalize_reward))
+    # strategy.print("mean: {}, std {}".format(critic.mean, critic.std))
  
     # configure tokenizer
     tokenizer = get_tokenizer(args.pretrain, actor.model, "left", strategy, use_fast=not args.disable_fast_tokenizer)
     get_tokenizer(args.critic_pretrain, critic, "left", strategy, use_fast=not args.disable_fast_tokenizer)
 
-    strategy.print(actor)
-    strategy.print(critic)
+    # strategy.print(actor)
+    # strategy.print(critic)
 
     # load weights for reference actor
     initial_model = Actor(
@@ -154,6 +154,8 @@ def train(args):
 
     # load checkpoint
     consumed_samples = 0
+    print(os.path.exists(os.path.join(args.ckpt_path, "_actor")))
+    return
     if args.load_checkpoint and os.path.exists(os.path.join(args.ckpt_path, "_actor")):
         _, states = strategy.load_ckpt(actor.model, os.path.join(args.ckpt_path, "_actor"), tag=args.ckpt_tag)
         strategy.load_ckpt(critic, os.path.join(args.ckpt_path, "_critic"), tag=args.ckpt_tag)
