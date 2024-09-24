@@ -276,6 +276,7 @@ class GradientCalculator(ABC):
         loss = actor_loss
         self.strategy.backward(loss, self.actor, self.actor_optim)
         # save gradient
+        os.makedirs("./grads", exist_ok=True)
         existing_files = os.listdir("./grads")
         file_count = len(existing_files)
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
