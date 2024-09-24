@@ -158,8 +158,8 @@ def train(args):
     if args.load_checkpoint and os.path.exists(os.path.join(args.ckpt_path, "_actor")):
         _, states = strategy.load_ckpt(actor.model, os.path.join(args.ckpt_path, "_actor"), tag=args.ckpt_tag, load_module_only=True)
         strategy.load_ckpt(critic, os.path.join(args.ckpt_path, "_critic"), tag=args.ckpt_tag, load_module_only=True)
-        consumed_samples = states["consumed_samples"]
-        strategy.print(f"Loaded the checkpoint: {args.ckpt_path}, consumed_samples: {consumed_samples}")
+        # consumed_samples = states["consumed_samples"]
+        # strategy.print(f"Loaded the checkpoint: {args.ckpt_path}, consumed_samples: {consumed_samples}")
 
     # configure Trainer
     trainer = GradientCalculator(
