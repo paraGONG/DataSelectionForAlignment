@@ -21,7 +21,10 @@ def compute_approx_kl(
         log_probs_base: Log probabilities of the base distribution.
         action_mask: Mask for actions.
     """
-
+    #debug
+    print("log_probs", log_probs)
+    print("log_probs_base", log_probs_base)
+    print("action_mask", action_mask)
     log_ratio = log_probs - log_probs_base
     return log_ratio * action_mask
 
@@ -55,11 +58,6 @@ def compute_reward(
 
     reward = last_reward + kl_reward
 
-    # debug
-    print('kl', kl)
-    print('kl_reward', kl_reward)
-    print('last_reward', last_reward)
-    print('reward', reward)
     return reward, kl
 
 
