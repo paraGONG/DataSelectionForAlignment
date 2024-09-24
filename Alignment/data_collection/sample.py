@@ -1,9 +1,9 @@
 import json
 import random
 
-input_file = './rlhf_prompt_collection_5w.jsonl'
-selected_file = './warmup_dataset.jsonl'
-remaining_file = './candidate_dataset.jsonl'
+input_file = 'rlhf_prompt_collection_5w.jsonl'
+selected_file = 'warmup_dataset.jsonl'
+remaining_file = 'candidate_dataset.jsonl'
 num_samples = 10240
 
 # 读取原始数据
