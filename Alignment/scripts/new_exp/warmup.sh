@@ -1,4 +1,4 @@
-deepspeed --module openrlhf.cli.train_ppo \
+deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
   --save_path ../checkpoint/tinyllama_warmup \
