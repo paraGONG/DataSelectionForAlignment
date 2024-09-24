@@ -160,8 +160,6 @@ def train(args):
         consumed_samples = states["consumed_samples"]
         strategy.print(f"Loaded the checkpoint: {args.ckpt_path}, consumed_samples: {consumed_samples}")
 
-    os.makedirs(args.save_path, exist_ok=True)
-
     # configure Trainer
     trainer = GradientCalculator(
         strategy,
@@ -187,6 +185,7 @@ def train(args):
         kl_target=args.kl_target,
         ptx_coef=args.ptx_coef,
         max_norm=args.max_norm,
+        save_path=args.save_path,
         # fro GPT generation
         do_sample=True,
         max_new_tokens=args.generate_max_len,

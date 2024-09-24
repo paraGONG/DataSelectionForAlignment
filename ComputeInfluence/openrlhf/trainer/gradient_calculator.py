@@ -1,4 +1,5 @@
 import math
+import json
 import os.path
 from abc import ABC
 from typing import Any, Callable, Dict, List, Optional, Union
@@ -70,6 +71,7 @@ class GradientCalculator(ABC):
         gradient_checkpointing: bool = False,
         max_epochs: int = 1,
         max_norm: float = 1.0,
+        save_path: str = None,
         tokenizer: Optional[Callable[[Any], dict]] = None,
         prompt_max_len: int = 128,
         dataloader_pin_memory: bool = True,
@@ -129,6 +131,15 @@ class GradientCalculator(ABC):
             reward_fn,
         )
         self.replay_buffer = NaiveReplayBuffer(micro_train_batch_size, buffer_limit, buffer_cpu_offload)
+        
+        self.save_path = save_path
+        os.makedirs(self.save_path, exist_ok=True)
+        self.gradients_save_path = os.path.join(self.save_path, 'gradients')
+        self.output_save_path = os.path.join(self.save_path, 'output')
+        self.status_save_path = os.path.join(self.save_path, 'status')
+        os.makedirs(self.gradients_save_path, exist_ok=True)
+        os.makedirs(self.output_save_path, exist_ok=True)
+        os.makedirs(self.status_save_path, exist_ok=True)
 
 
     def fit(
@@ -166,7 +177,11 @@ class GradientCalculator(ABC):
                 # print prompt/answer in each update step
                 if steps % update_timesteps == 0:
                     output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
-                    self.strategy.print(output[0])
+                    with open(os.path.join(self.output_save_path, 'output.jsonl'), 'a') as f:
+                        data = {'output': output[0]}
+                        json.dump(data, f)
+                        f.write('\n')
+                    # self.strategy.print(output[0])
                 self.replay_buffer.append(experience)
 
                 if steps % update_timesteps == 0:
@@ -211,6 +226,10 @@ class GradientCalculator(ABC):
                 experience.to_device(device)
                 status = self.training_step(experience, global_steps)
 
+                with open(os.path.join(self.status_save_path, 'status.jsonl'), 'a') as f:
+                    json.dump(status, f)
+                    f.write('\n')
+
                 # for DP
                 # weighted mean for kl
                 if "kl" in status:
@@ -253,10 +272,10 @@ class GradientCalculator(ABC):
 
     def training_step(self, experience: Experience, global_steps) -> Dict[str, float]:
         status = {}
-        status = self.training_step_actor(experience)
+        status = self.training_step_actor(experience, global_steps)
         return status
 
-    def training_step_actor(self, experience: Experience) -> Dict[str, float]:
+    def training_step_actor(self, experience: Experience, global_step) -> Dict[str, float]:
         self.actor.train()
 
         num_actions = experience.action_mask.size(1)
@@ -276,12 +295,8 @@ class GradientCalculator(ABC):
         loss = actor_loss
         self.strategy.backward(loss, self.actor, self.actor_optim)
         # save gradient
-        os.makedirs("./grads", exist_ok=True)
-        existing_files = os.listdir("./grads")
-        file_count = len(existing_files)
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
-        torch.save(vectorized_grads, f"./grads/test_gradients_{file_count}.pt")
-        print('gradient saved!')
+        torch.save(vectorized_grads, os.path.join(self.gradients_save_path, "gradient_{global_step}.pt"))
         # clear gradient
         self.actor_optim.clear_hp_grads()
         self.actor_optim.clear_lp_grads()
