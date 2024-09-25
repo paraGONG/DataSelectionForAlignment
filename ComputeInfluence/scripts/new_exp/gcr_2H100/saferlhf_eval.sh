@@ -1,7 +1,7 @@
 deepspeed --include localhost:0 --master_port 29500 --hostfile=None --module openrlhf.cli.calculate_gradient \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
-  --save_path ../tinyllamachat_global_step10_gradients_evaluation_safetyrlhf \
+  --save_path ../tinyllamachat_global_step10_gradients_evaluation_saferlhf \
   --ckpt_path ../../tinyllama-warmup-ckpt \
   --ckpt_tag global_step10 \
   --micro_train_batch_size 1 \
