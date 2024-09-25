@@ -51,6 +51,8 @@ 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
 ```cmd
 sudo apt-get install git-lfs
 git lfs install
+git lfs track "*.jsonl"  
+git add .gitattributes
 git add .
 git commit -m "add file"
 git push
