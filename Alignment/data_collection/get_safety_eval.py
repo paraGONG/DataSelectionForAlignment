@@ -14,6 +14,6 @@ sample_size = 200
 sampled_data = random.sample(a_data, min(sample_size, len(a_data)))
 
 # 将结果写入c.jsonl
-with open('safetyrlhf_evaluation_dataset.jsonl', 'w', encoding='utf-8') as c_file:
+with open('saferlhf_evaluation_dataset.jsonl', 'w', encoding='utf-8') as c_file:
     for item in sampled_data:
         c_file.write(json.dumps(item) + '\n')
