@@ -1,7 +1,7 @@
 deepspeed --include localhost:0 --master_port 29500 --hostfile=None --module openrlhf.cli.calculate_gradient \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
-  --save_path ../tinyllamachat_global_step10_gradients_train_part_8 \
+  --save_path ../tinyllamachat_global_step10_gradients_evaluation_safetyrlhf \
   --ckpt_path ../../tinyllama-warmup-ckpt \
   --ckpt_tag global_step10 \
   --micro_train_batch_size 1 \
@@ -16,7 +16,7 @@ deepspeed --include localhost:0 --master_port 29500 --hostfile=None --module ope
   --actor_learning_rate 5e-4 \
   --critic_learning_rate 5e-4 \
   --init_kl_coef 0.01 \
-  --prompt_data yifangong/split_candidate_dataset_part_8 \
+  --prompt_data yifangong/saferlhf_evaluation_dataset \
   --input_key prompt \
   --input_template "<|user|>\n{}</s>\n<|assistant|>\n" \
   --max_samples 100000 \
