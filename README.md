@@ -66,3 +66,13 @@ yifangong
 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
 ```
 
+
+
+### 计算梯度
+
+```cmd
+cd ~
+cd yifan/DataSelectionForAlignment/ComputeInfluence
+bash scripts\new_exp\gcr_2H100\saferlhf_eval.sh
+```
+
