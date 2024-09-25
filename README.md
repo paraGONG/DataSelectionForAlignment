@@ -49,9 +49,18 @@ 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
 4、上传
 
 ```cmd
+sudo apt-get install git-lfs
 git lfs install
 git add .
 git commit -m "add file"
 git push
+
+# 可能遇到设置git和huggingface登录
+git config --global user.email "1240138092@qq.com"
+git config --global user.name "paraGONG"
+# huggingface用户名
+yifangong
+# 密码
+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
 ```
 
