@@ -89,6 +89,9 @@ def blending_datasets(
 
         if train_split and train_split in data:
             train_data = data[train_split].select(range(min(max_count, len(data[train_split]))))
+        # modify here
+        elif eval_split in data:
+            train_data = data[eval_split].select(range(min(max_count, len(data[eval_split]))))
         else:
             train_data = data.select(range(min(max_count, len(data))))
         train_data_list.append(train_data)
