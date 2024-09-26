@@ -22,17 +22,20 @@ def prepare_gradients_train():
         gradients_path = f"../tinyllamachat_global_step10_gradients_train/tinyllamachat_global_step10_gradients_train_part_0-3/tinyllamachat_global_step10_gradients_train_part_{i}/gradients"
         num = len([f for f in os.listdir(gradients_path)])
         for j in range(num):
-            gradients_train.append(os.path.join(gradients_path, f"gradient_{j+1}.pt"))
+            gradients = torch.load(gradients_path)
+            gradients_train.append(os.path.join(gradients, f"gradient_{j+1}.pt"))
     for i in range(4):
         gradients_path = f"../tinyllamachat_global_step10_gradients_train/tinyllamachat_global_step10_gradients_train_part_4-7/tinyllamachat_global_step10_gradients_train_part_{i+4}/gradients"
         num = len([f for f in os.listdir(gradients_path)])
         for j in range(num):
-            gradients_train.append(os.path.join(gradients_path, f"gradient_{j+1}.pt"))
+            gradients = torch.load(gradients_path)
+            gradients_train.append(os.path.join(gradients, f"gradient_{j+1}.pt"))
     for i in range(2):
         gradients_path = f"../tinyllamachat_global_step10_gradients_train/tinyllamachat_global_step10_gradients_train_part_8-9/tinyllamachat_global_step10_gradients_train_part_{i+8}/gradients"
         num = len([f for f in os.listdir(gradients_path)])
         for j in range(num):
-            gradients_train.append(os.path.join(gradients_path, f"gradient_{j+1}.pt"))
+            gradients = torch.load(gradients_path)
+            gradients_train.append(os.path.join(gradients, f"gradient_{j+1}.pt"))
     return gradients_train
 
 
@@ -50,8 +53,6 @@ def compute_influence(gradients_train, gradients_eval, save_path):
     for i, eval_gradient in enumerate(gradients_eval):
         influence_scores = []
         for train_gradient in tqdm(gradients_train, desc=f"evaluation_data_{i}"):
-            train_gradient = torch.load(train_gradient)
-            eval_gradient = torch.load(eval_gradient)
             influence_score = calculate_influence_score(train_gradient, eval_gradient)
             influence_scores.append(influence_score)
         with open(os.path.join(save_path, f"scores_{i}"), 'w') as f:
