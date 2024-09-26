@@ -71,7 +71,12 @@ if __name__ == '__main__':
 
     x = [data[f'{args.x}'] for data in sorted_list]
     y = [data[f'{args.y}'] for data in sorted_list]
-
+    
+    count = 0
+    for i in x:
+        if i > 0:
+            count += 1
+    print(count)
     plt.scatter(x, y, s=3)
 
     plt.title('Scatter Plot')
