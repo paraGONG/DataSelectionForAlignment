@@ -83,4 +83,4 @@ if __name__ == '__main__':
     plt.title('Scatter Plot')
     plt.xlabel(f'X_{args.x}')
     plt.ylabel(f'Y_{args.y}')
-    plt.savefig(f'../tmp/single_data_2_{args.x}-{args.y}.png')
+    plt.savefig(f'../tmp/single_data_3_{args.x}-{args.y}.png')
