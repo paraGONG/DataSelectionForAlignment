@@ -166,7 +166,7 @@ if __name__ == '__main__':
     infer_data = infer_data[:] + data[len(infer_data):]
 
     if args.inference:
-        print(f"inference on dataset {args.date} with model {args.model}...")
+        print(f"inference on dataset {args.data} with model {args.model}...")
         results = model_inference(args, infer_data)
         
         with open(output_file, "w") as fw:
