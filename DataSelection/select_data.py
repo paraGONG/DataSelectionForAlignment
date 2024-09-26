@@ -16,6 +16,7 @@ mean_values = np.mean(all_scores, axis=0)
 print(mean_values)
 print(max(mean_values))
 print(min(mean_values))
+print(len(mean_values))
 
 # k = 3
 # top_k_indices = np.argsort(list(means.values()))[-k:]
