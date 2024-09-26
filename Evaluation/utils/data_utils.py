@@ -41,4 +41,4 @@ def load_remote_dataset(data_path, start=0):
     data = []
     for line in dataset:
         data.append({"prompt": line["prompt"], "source": line["source"]})
-    return data[:2]
+    return data
