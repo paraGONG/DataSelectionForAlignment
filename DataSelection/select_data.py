@@ -13,13 +13,6 @@ for i in range(200):
         all_scores.append(scores)
 
 mean_values = np.mean(all_scores, axis=0)
-print(mean_values)
-print(max(mean_values))
-print(min(mean_values))
-print(len(mean_values))
-
-# k = 3
-# top_k_indices = np.argsort(list(means.values()))[-k:]
-
-# top_k_files = {list(means.keys())[i]: means[list(means.keys())[i]] for i in top_k_indices}
-# print(top_k_files)
+k = 10240
+top_k_indices = np.argsort(mean_values)[-k:][::-1]
+print("最大k个值的索引:", top_k_indices)
