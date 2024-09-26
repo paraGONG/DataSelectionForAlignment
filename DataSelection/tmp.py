@@ -1,6 +1,6 @@
 import torch
 
-data = torch.load('your_file.pt')
+data = torch.load('.pt')
 
 if isinstance(data, dict):
     for key, value in data.items():
