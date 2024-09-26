@@ -1,7 +1,7 @@
 import os
 import json
 import torch
-import tqdm
+from tqdm import tqdm
 
 def calculate_influence_score(training_info: torch.Tensor, validation_info: torch.Tensor):
     """Calculate the influence score.
