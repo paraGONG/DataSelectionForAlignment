@@ -10,3 +10,4 @@ def prepare_gradients_train():
         num = len([f for f in os.listdir(gradients_path)])
         print(num)
 
+prepare_gradients_train()
