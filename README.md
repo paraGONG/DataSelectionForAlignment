@@ -90,3 +90,5 @@ git clone https://huggingface.co/yifangong/tinyllama-warmup-ckpt
 bash scripts\new_exp\selected.sh
 ```
 
+saferlhf_evaluation_dataset_tinyllama_random_TinyLlama-1.1B-Chat-v1.0-reward-model.jsonl
+
