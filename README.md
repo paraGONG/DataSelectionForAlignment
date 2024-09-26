@@ -76,3 +76,17 @@ cd yifan/DataSelectionForAlignment/ComputeInfluence
 bash scripts\new_exp\gcr_2H100\saferlhf_eval.sh
 ```
 
+
+
+### Alignment
+
+```cmd
+cd ~
+cd yifan/DataSelectionForAlignment/Alignment
+git pull
+# 这里要git clone一下checkpoint
+git clone https://huggingface.co/yifangong/tinyllama-warmup-ckpt
+# 然后运行
+bash scripts\new_exp\selected.sh
+```
+
