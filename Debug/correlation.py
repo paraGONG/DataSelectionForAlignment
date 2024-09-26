@@ -59,7 +59,7 @@ if __name__ == '__main__':
     influence_scores = get_influence()
 
     # mean_influencec_scores = np.mean(influence_scores, axis=0)
-    single_influence_scores = influence_scores[12]
+    single_influence_scores = influence_scores[4]
 
     # for info, mean_influence_score in zip(train_info, mean_influencec_scores):
     #     info['mean_influence'] = mean_influence_score
