@@ -1,6 +1,6 @@
 python eval.py \
     --data yifangong/saferlhf_evaluation_dataset \
-    --model yifangong/tinyllama_random_dataset \
+    --model yifangong/tinyllama_random \
     --batch_size 4 \
     --device "cpu" \
     --inference \
