@@ -119,12 +119,12 @@ def reward_computation(args, infer_data):
     #     line["reward"] = score
     # print("avg reward score: ", np.mean(rewards))
     tokenizer = AutoTokenizer.from_pretrained(args.reward_model)
-    config = AutoConfig.from_pretrained(args.model, trust_remote_code=True)
+    config = AutoConfig.from_pretrained(args.reward_model, trust_remote_code=True)
     base_class = AutoModel._model_mapping[type(config)]
     base_pretrained_class = base_class.__base__
     cls_class = _get_reward_model(base_pretrained_class, base_class)
     reward_model = cls_class.from_pretrained(
-        args.model,
+        args.reward_model,
         trust_remote_code=True,
         torch_dtype=torch.bfloat16,
         device_map=device,
