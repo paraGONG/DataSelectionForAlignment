@@ -29,6 +29,7 @@ def _get_reward_model(base_pretrained_model, base_llm_model, value_head_prefix="
 
             # mean std
             # self.normalize_reward = config.normalize_reward
+            self.normalize_reward = False
             self.register_buffer("mean", torch.zeros(1), persistent=False)
             self.register_buffer("std", torch.ones(1), persistent=False)
 
