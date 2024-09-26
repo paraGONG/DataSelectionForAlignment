@@ -23,6 +23,6 @@ def calculate_influence_score(training_info: torch.Tensor, validation_info: torc
     return influence_scores
 
 data1 = torch.load('../tinyllamachat_global_step10_gradients_train/tinyllamachat_global_step10_gradients_train_part_0-3/tinyllamachat_global_step10_gradients_train_part_0/gradients/gradient_1.pt')
-data2 = torch.load('../tinyllamachat_global_step10_gradients_train/tinyllamachat_global_step10_gradients_train_part_0-3/tinyllamachat_global_step10_gradients_train_part_0/gradients/gradient_2.pt')
+data2 = torch.load('../tinyllamachat_global_step10_gradients_train/tinyllamachat_global_step10_gradients_train_part_0-3/tinyllamachat_global_step10_gradients_train_part_1/gradients/gradient_1.pt')
 influence_score = calculate_influence_score(data1, data2)
 print(influence_score)
