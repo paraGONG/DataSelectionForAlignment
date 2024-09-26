@@ -71,6 +71,6 @@ if __name__ == '__main__':
     plt.scatter(x, y)
 
     plt.title('Scatter Plot')
-    plt.xlabel('X-axis')
-    plt.ylabel('Y-axis')
+    plt.xlabel(f'X_{args.x}')
+    plt.ylabel(f'Y_{args.y}')
     plt.savefig(f'../tmp/{args.x}-{args.y}.png')
