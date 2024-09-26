@@ -77,7 +77,7 @@ if __name__ == '__main__':
         if i > 0:
             count += 1
     print(count)
-    print(len(count))
+    print(len(x))
     plt.scatter(x, y, s=3)
 
     plt.title('Scatter Plot')
