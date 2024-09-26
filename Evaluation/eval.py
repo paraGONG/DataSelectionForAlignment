@@ -167,7 +167,7 @@ if __name__ == '__main__':
     else:
         data = load_remote_dataset(args.data)
     infer_data = infer_data[:] + data[len(infer_data):]
-    infer_data = infer_data[:2]
+    infer_data = infer_data
 
     if args.inference:
         print(f"inference on dataset {args.data} with model {args.model}...")
