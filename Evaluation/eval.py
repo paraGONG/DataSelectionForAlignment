@@ -26,6 +26,7 @@ def parse_arguments():
     args = parser.parse_args()
     return args
 
+
 class TextDataset(Dataset):
     def __init__(self, args, tokenizer, data, max_length=2048):
         self.args = args
@@ -51,6 +52,7 @@ class TextDataset(Dataset):
             "input_ids": encoding["input_ids"].squeeze(),
             "attention_mask": encoding["attention_mask"].squeeze(),
         }
+
 
 def model_inference(args, infer_data):
     results = [x for x in infer_data if "answer" in x]
@@ -101,6 +103,7 @@ def model_inference(args, infer_data):
             line["answer"] = answer
             results.append(line)
     return results
+
 
 def reward_computation(args, infer_data):
     device = torch.device(args.device)
