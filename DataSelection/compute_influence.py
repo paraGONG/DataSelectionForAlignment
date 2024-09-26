@@ -20,5 +20,5 @@ def prepare_gradients_train():
         num = len([f for f in os.listdir(gradients_path)])
         for j in range(num):
             gradients_train.append(os.path.join(gradients_path, f"gradient_{j+1}.pt"))
-    print(len(gradients_path))
+    print(len(gradients_train))
 prepare_gradients_train()
