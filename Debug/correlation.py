@@ -7,7 +7,7 @@ import argparse
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='X Y correlation')
-    parser.add_argument("--x", type=str, default="mean_influence", help="X")
+    parser.add_argument("--x", type=str, default="single_influence_score", help="X")
     parser.add_argument("--y", type=str, default="policy_loss", help="Y")
     args = parser.parse_args()
     return args
