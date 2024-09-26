@@ -49,7 +49,7 @@ def compute_influence(gradients_train, gradients_eval, save_path):
     os.makedirs(save_path, exist_ok=True)
     for i, eval_gradient in enumerate(gradients_eval):
         influence_scores = []
-        for train_gradient in tqdm(train_gradient):
+        for train_gradient in tqdm(gradients_train, desc=f"evaluation_data_{i}"):
             influence_score = calculate_influence_score(train_gradient, eval_gradient)
             influence_scores.append(influence_score)
         with open(os.path.join(save_path, f"scores_{i}"), 'w') as f:
