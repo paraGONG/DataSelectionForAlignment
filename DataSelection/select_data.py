@@ -20,6 +20,6 @@ with open("../candidate_dataset.jsonl", 'r') as f:
     data = [json.loads(line) for line in f]
 selected_data = [data[i] for i in top_k_indices]
 
-with open("../selected_dataset", 'w') as f:
+with open("../selected_dataset.jsonl", 'w') as f:
     for item in selected_data:
         f.write(json.dumps(item) + '\n')
