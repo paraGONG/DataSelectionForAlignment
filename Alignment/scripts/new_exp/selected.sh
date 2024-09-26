@@ -1,9 +1,9 @@
 deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
-  --save_path ../checkpoint/tinyllama_selected \
+  --save_path ../checkpoint/tinyllama_selected_epoch_3 \
   --ckpt_path  ./tinyllama-warmup-ckpt \
-  --save_steps 10 \
+  --save_steps 20 \
   --max_ckpt_num 1000 \
   --logging_steps 1 \
   --eval_steps -1 \
@@ -11,7 +11,7 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --train_batch_size 128 \
   --micro_rollout_batch_size 4 \
   --rollout_batch_size 512 \
-  --max_epochs 1 \
+  --max_epochs 3 \
   --prompt_max_len 1024 \
   --generate_max_len 1024 \
   --zero_stage 0 \
@@ -30,5 +30,5 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --critic_lora_alpha 16 \
   --flash_attn \
   --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
-  --wandb_project tinyllama_selected \
-  --wandb_run_name tinyllama_selected
+  --wandb_project tinyllama_selected_epoch_3 \
+  --wandb_run_name tinyllama_selected_epoch_3
