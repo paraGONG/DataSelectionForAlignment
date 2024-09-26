@@ -15,4 +15,11 @@ for i in range(200):
 mean_values = np.mean(all_scores, axis=0)
 k = 10240
 top_k_indices = np.argsort(mean_values)[-k:][::-1]
-print("最大k个值的索引:", top_k_indices)
+
+with open("../candidate_dataset.jsonl", 'r') as f:
+    data = [json.loads(line) for line in f]
+selected_data = [data[i] for i in top_k_indices]
+
+with open("../selected_dataset", 'w') as f:
+    for item in selected_data:
+        f.write(json.dumps(item) + '\n')
