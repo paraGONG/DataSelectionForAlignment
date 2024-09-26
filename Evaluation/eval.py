@@ -18,7 +18,7 @@ def parse_arguments():
     parser.add_argument("-d", "--data", type=str, default=None, help="evaluation data path")
     parser.add_argument("-m", "--model", type=str, default=None, help="evaluation model path")
     parser.add_argument("-b", "--batch_size", type=int, default=8, help="Batch size")
-    parser.add_argument("-i", "--device_id", type=int, default=0, help="device id")
+    parser.add_argument("-i", "--device", type=int, default="cuda:0", help="device")
     parser.add_argument("-o", "--output_dir", type=str, default="./evaluation_results", help="output dir")
     parser.add_argument("-f", "--inference", action="store_true", help="if inference model or use a existing file")
     parser.add_argument("-r", "--reward", action="store_true", help="if compute reward")
@@ -54,7 +54,7 @@ class TextDataset(Dataset):
 
 def model_inference(args, infer_data):
     results = [x for x in infer_data if "answer" in x]
-    device = torch.device(f"cuda:{args.device_id}" if torch.cuda.is_available() else "cpu")
+    device = torch.device(args.device)
     tokenizer = AutoTokenizer.from_pretrained(
         pretrained_model_name_or_path=args.model,
         model_max_length = 2048,
@@ -103,7 +103,7 @@ def model_inference(args, infer_data):
     return results
 
 def reward_computation(args, infer_data):
-    device = torch.device(f"cuda:{args.device_id}" if torch.cuda.is_available() else "cpu")
+    device = torch.device(args.device)
     # reward_model, tokenizer = AutoModelForSequenceClassification.from_pretrained(args.reward_model), AutoTokenizer.from_pretrained(args.reward_model)
     # reward_model = reward_model.to(device)
     # rewards = []
