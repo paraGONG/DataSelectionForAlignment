@@ -58,12 +58,16 @@ if __name__ == '__main__':
     eval_info = get_eval_info()
     influence_scores = get_influence()
 
-    mean_influencec_scores = np.mean(influence_scores, axis=0)
+    # mean_influencec_scores = np.mean(influence_scores, axis=0)
+    single_influence_scores = influence_scores[2]
 
-    for info, mean_influence_score in zip(train_info, mean_influencec_scores):
-        info['mean_influence'] = mean_influence_score
+    # for info, mean_influence_score in zip(train_info, mean_influencec_scores):
+    #     info['mean_influence'] = mean_influence_score
 
-    sorted_list = sorted(train_info, key=lambda x: x['mean_influence'], reverse=True)
+    for info, single_influence_score in zip(train_info, single_influence_scores):
+        info['single_influence_score'] = single_influence_score
+
+    sorted_list = sorted(train_info, key=lambda x: x['single_influence_score'], reverse=True)
 
     x = [data[f'{args.x}'] for data in sorted_list]
     y = [data[f'{args.y}'] for data in sorted_list]
@@ -73,4 +77,4 @@ if __name__ == '__main__':
     plt.title('Scatter Plot')
     plt.xlabel(f'X_{args.x}')
     plt.ylabel(f'Y_{args.y}')
-    plt.savefig(f'../tmp/{args.x}-{args.y}.png')
+    plt.savefig(f'../tmp/single_data_{args.x}-{args.y}.png')
