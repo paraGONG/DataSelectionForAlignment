@@ -18,7 +18,7 @@ def parse_arguments():
     parser.add_argument("-d", "--data", type=str, default=None, help="evaluation data path")
     parser.add_argument("-m", "--model", type=str, default=None, help="evaluation model path")
     parser.add_argument("-b", "--batch_size", type=int, default=8, help="Batch size")
-    parser.add_argument("-i", "--device", type=int, default="cuda:0", help="device")
+    parser.add_argument("-i", "--device", type=str, default="cuda:0", help="device")
     parser.add_argument("-o", "--output_dir", type=str, default="./evaluation_results", help="output dir")
     parser.add_argument("-f", "--inference", action="store_true", help="if inference model or use a existing file")
     parser.add_argument("-r", "--reward", action="store_true", help="if compute reward")
