@@ -3,7 +3,7 @@ deepspeed --module openrlhf.cli.train_ppo \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
   --save_path ../checkpoint/idle \
   --ckpt_path  ../ckpt/idle \
-  --save_steps 10 \
+  --save_steps -1 \
   --max_ckpt_num 500 \
   --logging_steps 1 \
   --eval_steps -1 \
@@ -30,5 +30,5 @@ deepspeed --module openrlhf.cli.train_ppo \
   --critic_lora_alpha 16 \
   --flash_attn \
   --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
-  --wandb_project idle \
-  --wandb_run_name idle
+  --wandb_project idle_x \
+  --wandb_run_name idle_x
