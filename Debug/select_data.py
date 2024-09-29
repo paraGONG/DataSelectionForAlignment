@@ -98,6 +98,7 @@ if __name__ == '__main__':
     # plt.title('Self Influence Cosine')
     # plt.savefig(f'../tmp/self-influence-cosine.png')
     print(eval_output[index]['output'])
+    print(eval_info[index])
     save_path = f"../debug/selected_data"
     os.makedirs(save_path, exist_ok=True)
     with open(os.path.join(save_path, f"eval_num_{index}.jsonl"), 'w') as f:
