@@ -7,7 +7,7 @@ import argparse
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='debug')
-    parser.add_argument("--index", type=int, default="index of eval data", help="X")
+    parser.add_argument("--index", type=int, default=0, help="index of eval data")
     args = parser.parse_args()
     return args
 
