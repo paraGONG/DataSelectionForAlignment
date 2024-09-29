@@ -55,17 +55,6 @@ def get_influence():
     return all_scores
 
 
-def get_influence_cosine():
-    folder_path = '../debug/self_influence_cosine'
-    all_scores = []
-    for i in range(100):
-        file_path = os.path.join(folder_path, f'scores_{i}')
-        with open(file_path, 'r') as f:
-            scores = json.load(f)
-            all_scores.append(scores)
-    return all_scores
-
-
 def get_eval_info():
     status_path = f"../tinyllamachat_global_step10_gradients_evaluation_saferlhf/status/status.jsonl"
     eval_status = read_jsonl(status_path)
@@ -73,7 +62,7 @@ def get_eval_info():
 
 if __name__ == '__main__':
     train_info = get_train_info()
-    influence_scores = get_influence_cosine()
+    influence_scores = get_influence()
     # for i in range(100):
     #     single_influence_scores = influence_scores[i]
 
@@ -84,8 +73,8 @@ if __name__ == '__main__':
 
     plt.imshow(influence_scores, cmap='hot', interpolation='nearest')
     plt.colorbar()
-    plt.title('Self Influence Cosine')
-    plt.savefig(f'../tmp/self-influence-cosine.png')
+    plt.title('Self Influence')
+    plt.savefig(f'../tmp/self-influence.png')
 
     # mean_values = np.mean(all_scores, axis=0)
     # k = 10240
