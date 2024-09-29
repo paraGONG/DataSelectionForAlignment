@@ -34,7 +34,7 @@ def calculate_influence_score_cosine(training_info: torch.Tensor, validation_inf
     # N x N_VALID
     # influence_scores = torch.matmul(
     #     training_info, validation_info)
-    influence_scores = cosine_similarity(training_info, validation_info)
+    influence_scores = torch.nn.functional.cosine_similarity(training_info, validation_info, dim=0)
     return influence_scores.item()
 
 
