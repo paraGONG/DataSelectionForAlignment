@@ -2,6 +2,14 @@ import os
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='debug')
+    parser.add_argument("--index", type=int, default="index of eval data", help="X")
+    args = parser.parse_args()
+    return args
 
 
 def read_jsonl(file_path):
@@ -79,13 +87,14 @@ def get_eval_info():
     return eval_status
 
 if __name__ == '__main__':
+    args = parse_arguments()
     train_info = get_train_info()
     train_output = get_train_output()
     eval_info = get_eval_info()
     eval_output = get_eval_output()
     influence_scores = get_influence()
 
-    index = 0
+    index = args.index
     target_scores = influence_scores[index]
     for info, score, output in zip(train_info, target_scores, train_output):
         info['influence_score'] = score
