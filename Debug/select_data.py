@@ -89,7 +89,7 @@ if __name__ == '__main__':
     target_scores = influence_scores[index]
     for info, score, output in zip(train_info, target_scores, train_output):
         info['influence_score'] = score
-        info['output'] = output
+        info['output'] = output['output']
 
     sorted_list = sorted(train_info, key=lambda x: x['influence_score'], reverse=True)
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     # plt.colorbar()
     # plt.title('Self Influence Cosine')
     # plt.savefig(f'../tmp/self-influence-cosine.png')
-    print(eval_output[index])
+    print(eval_output[index]['output'])
     save_path = f"../debug/selected_data"
     os.makedirs(save_path, exist_ok=True)
     with open(os.path.join(save_path, f"eval_num_{index}.jsonl"), 'w') as f:
