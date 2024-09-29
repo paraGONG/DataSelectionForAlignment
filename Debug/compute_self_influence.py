@@ -2,6 +2,7 @@ import os
 import json
 import torch
 from tqdm import tqdm
+import numpy as np
 
 def calculate_influence_score(training_info: torch.Tensor, validation_info: torch.Tensor):
     """Calculate the influence score.
@@ -13,6 +14,27 @@ def calculate_influence_score(training_info: torch.Tensor, validation_info: torc
     # N x N_VALID
     influence_scores = torch.matmul(
         training_info, validation_info)
+    return influence_scores.item()
+
+
+def cosine_similarity(vec1, vec2):
+    dot_product = np.dot(vec1, vec2)
+    norm_a = np.linalg.norm(vec1)
+    norm_b = np.linalg.norm(vec2)
+    return dot_product / (norm_a * norm_b)
+
+
+def calculate_influence_score_cosine(training_info: torch.Tensor, validation_info: torch.Tensor):
+    """Calculate the influence score.
+
+    Args:
+        training_info (torch.Tensor): training info (gradients/representations) stored in a tensor of shape N x N_DIM
+        validation_info (torch.Tensor): validation info (gradients/representations) stored in a tensor of shape N_VALID x N_DIM
+    """
+    # N x N_VALID
+    # influence_scores = torch.matmul(
+    #     training_info, validation_info)
+    influence_scores = cosine_similarity(training_info, validation_info)
     return influence_scores.item()
 
 
@@ -66,9 +88,8 @@ def compute_influence(gradients_train, gradients_eval, save_path):
             json.dump(influence_scores, f)
 
 
-save_path = "../debug/self_influence"
-os.makedirs(save_path, exist_ok=True)
+save_path = "../debug/self_influence_cosine"
 gradients_train = prepare_gradients_train()
 # gradients_eval = prepare_gradients_evaluation()
 # compute_influence(gradients_train, gradients_eval, "../influence")
-compute_influence(gradients_train, gradients_train, save_path)
+calculate_influence_score_cosine(gradients_train, gradients_train, save_path)
