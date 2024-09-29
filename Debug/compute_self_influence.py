@@ -92,4 +92,4 @@ save_path = "../debug/self_influence_cosine"
 gradients_train = prepare_gradients_train()
 # gradients_eval = prepare_gradients_evaluation()
 # compute_influence(gradients_train, gradients_eval, "../influence")
-calculate_influence(gradients_train, gradients_train, save_path)
+compute_influence(gradients_train, gradients_train, save_path)
