@@ -8,6 +8,7 @@ import argparse
 def parse_arguments():
     parser = argparse.ArgumentParser(description='debug')
     parser.add_argument("--index", type=int, default=0, help="index of eval data")
+    parser.add_argument("--reverse", action="store_true", default=False, help="reverse")
     args = parser.parse_args()
     return args
 
@@ -59,6 +60,7 @@ def get_train_info():
         train_info.extend(status)
     return train_info
 
+
 def get_influence():
     folder_path = '../influence'
     all_scores = []
@@ -86,6 +88,7 @@ def get_eval_info():
     eval_status = read_jsonl(status_path)
     return eval_status
 
+
 if __name__ == '__main__':
     args = parse_arguments()
     train_info = get_train_info()
@@ -99,8 +102,12 @@ if __name__ == '__main__':
     for info, score, output in zip(train_info, target_scores, train_output):
         info['influence_score'] = score
         info['output'] = output['output']
+    sorted_list = []
 
-    sorted_list = sorted(train_info, key=lambda x: x['influence_score'], reverse=True)
+    if args.reverse:
+            sorted_list = sorted(train_info, key=lambda x: x['influence_score'], reverse=False)
+    else:
+        sorted_list = sorted(train_info, key=lambda x: x['influence_score'], reverse=True)
 
     # plt.imshow(influence_scores, cmap='hot', interpolation='nearest')
     # plt.colorbar()
@@ -110,6 +117,6 @@ if __name__ == '__main__':
     print(eval_info[index])
     save_path = f"../debug/selected_data"
     os.makedirs(save_path, exist_ok=True)
-    with open(os.path.join(save_path, f"eval_num_{index}.jsonl"), 'w') as f:
+    with open(os.path.join(save_path, f"eval_num_{index}_reverse_{args.reverse}.jsonl"), 'w') as f:
         for item in sorted_list:
             f.write(json.dumps(item) + '\n')
