@@ -311,7 +311,7 @@ class GradientCalculator(ABC):
         self.actor_optim.clear_lp_grads()
         # self.actor_optim.zero_grad()
 
-        vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
+        vectorized_grads = [p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None]
         print("gradients(supposed to be zero/None): ")
         print(vectorized_grads)
 
