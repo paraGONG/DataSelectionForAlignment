@@ -293,7 +293,7 @@ class GradientCalculator(ABC):
         # print advantage
         print("advantage:")
         print(experience.advantages.size)
-        print(experience.advantages)
+        # print(experience.advantages)
         # loss function
         actor_loss = self.actor_loss_fn(
             action_log_probs,
