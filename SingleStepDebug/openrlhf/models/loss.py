@@ -44,16 +44,19 @@ class PolicyLoss(nn.Module):
         ratio = (log_probs - old_log_probs).exp()
         
         print("log_probs: ")
-        print(log_probs)
+        print(log_probs.size())
         print("old_log_probs: ")
-        print(old_log_probs)
+        print(old_log_probs.size())
         print("ratio: ")
-        print(ratio)
-        
+        print(ratio.size())
+
         surr1 = ratio * advantages
         surr2 = ratio.clamp(1 - self.clip_eps, 1 + self.clip_eps) * advantages
         loss = -torch.min(surr1, surr2)
         loss = masked_mean(loss, action_mask, dim=-1).mean()
+
+        print("loss: ")
+        print(loss.size())
         return loss
 
 
