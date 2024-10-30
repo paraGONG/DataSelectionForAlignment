@@ -57,6 +57,12 @@ class PolicyLoss(nn.Module):
         print(loss.size())
         loss = masked_mean(loss, action_mask, dim=-1).mean()
 
+        if loss == 0:
+            print("loss 0: ")
+            print(ratio)
+            print(log_probs)
+            print(advantages)
+
         return loss
 
 
