@@ -290,6 +290,9 @@ class GradientCalculator(ABC):
             experience.sequences, num_actions, attention_mask=experience.attention_mask, return_output=True
         )
 
+        # print advantage
+        print(experience.advantages.size)
+        print(experience.advantages)
         # loss function
         actor_loss = self.actor_loss_fn(
             action_log_probs,
@@ -304,16 +307,10 @@ class GradientCalculator(ABC):
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
         # do not save
         # torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{global_step}.pt"))
-        print("gradient: ")
-        print(vectorized_grads)
         # clear gradient
         self.actor_optim.clear_hp_grads()
         self.actor_optim.clear_lp_grads()
         # self.actor_optim.zero_grad()
-
-        vectorized_grads = [p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None]
-        print("gradients(supposed to be zero/None): ")
-        print(vectorized_grads)
 
         # status
         status = {"policy_loss": actor_loss.item(), "actor_lr": self.actor_scheduler.get_last_lr()[0]}
