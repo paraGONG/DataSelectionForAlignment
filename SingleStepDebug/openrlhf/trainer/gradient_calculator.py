@@ -181,10 +181,11 @@ class GradientCalculator(ABC):
                 # print prompt/answer in each update step
                 if steps % update_timesteps == 0:
                     output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
-                    with open(os.path.join(self.output_save_path, 'output.jsonl'), 'a') as f:
-                        data = {'output': output[0]}
-                        json.dump(data, f)
-                        f.write('\n')
+                    # do not save
+                    # with open(os.path.join(self.output_save_path, 'output.jsonl'), 'a') as f:
+                    #     data = {'output': output[0]}
+                    #     json.dump(data, f)
+                    #     f.write('\n')
                     # self.strategy.print(output[0])
                 self.replay_buffer.append(experience)
 
@@ -230,9 +231,10 @@ class GradientCalculator(ABC):
                 experience.to_device(device)
                 status = self.training_step(experience, global_steps)
 
-                with open(os.path.join(self.status_save_path, 'status.jsonl'), 'a') as f:
-                    json.dump(status, f)
-                    f.write('\n')
+                # do not save
+                # with open(os.path.join(self.status_save_path, 'status.jsonl'), 'a') as f:
+                #     json.dump(status, f)
+                #     f.write('\n')
 
                 # for DP
                 # weighted mean for kl
@@ -300,11 +302,18 @@ class GradientCalculator(ABC):
         self.strategy.backward(loss, self.actor, self.actor_optim)
         # save gradient
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
-        torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{global_step}.pt"))
+        # do not save
+        # torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{global_step}.pt"))
+        print("gradient: ")
+        print(vectorized_grads)
         # clear gradient
         self.actor_optim.clear_hp_grads()
         self.actor_optim.clear_lp_grads()
         # self.actor_optim.zero_grad()
+
+        vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
+        print("gradients(supposed to be zero/None): ")
+        print(vectorized_grads)
 
         # status
         status = {"policy_loss": actor_loss.item(), "actor_lr": self.actor_scheduler.get_last_lr()[0]}
