@@ -291,6 +291,7 @@ class GradientCalculator(ABC):
         )
 
         # print advantage
+        print("advantage:")
         print(experience.advantages.size)
         print(experience.advantages)
         # loss function
