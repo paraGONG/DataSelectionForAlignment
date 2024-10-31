@@ -59,11 +59,7 @@ class PolicyLoss(nn.Module):
 
         if loss == 0:
             print("loss 0: ")
-            print(ratio)
-            print(log_probs)
-            print(advantages)
-            print(surr1)
-            print(surr2)
+            print(action_mask)
         return loss
 
 
