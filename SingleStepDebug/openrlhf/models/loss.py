@@ -49,6 +49,9 @@ class PolicyLoss(nn.Module):
         print(old_log_probs.size())
         print("ratio: ")
         print(ratio.size())
+        print("action_mas: ")
+        print(action_mask.size())
+        print(action_mask)
 
         surr1 = ratio * advantages
         surr2 = ratio.clamp(1 - self.clip_eps, 1 + self.clip_eps) * advantages
@@ -59,7 +62,6 @@ class PolicyLoss(nn.Module):
 
         if loss == 0:
             print("loss 0: ")
-            print(action_mask)
         return loss
 
 
