@@ -47,8 +47,7 @@ class PolicyLoss(nn.Module):
         loss = -torch.min(surr1, surr2)
         loss = masked_mean(loss, action_mask, dim=-1).mean()
 
-        print(advantages.size())
-        print(masked_mean(advantages, action_mask, dim=-1).mean())
+        print(advantages)
         return loss
 
 

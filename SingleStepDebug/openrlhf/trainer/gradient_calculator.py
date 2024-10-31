@@ -290,10 +290,6 @@ class GradientCalculator(ABC):
             experience.sequences, num_actions, attention_mask=experience.attention_mask, return_output=True
         )
 
-        # print advantage
-        print("advantage:")
-        print(experience.advantages.size())
-        # print(experience.advantages)
         # loss function
         actor_loss = self.actor_loss_fn(
             action_log_probs,
