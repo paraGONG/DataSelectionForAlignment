@@ -62,7 +62,8 @@ class PolicyLoss(nn.Module):
             print(ratio)
             print(log_probs)
             print(advantages)
-
+            print(surr1)
+            print(surr2)
         return loss
 
 
