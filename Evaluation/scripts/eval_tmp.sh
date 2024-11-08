@@ -1,5 +1,5 @@
 python eval.py \
-    --data yifangong/saferlhf_evaluation_dataset \
+    --data output_tmp.jsonl \
     --model TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
     --batch_size 4 \
     --device "cuda:3" \
