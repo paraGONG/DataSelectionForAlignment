@@ -33,7 +33,8 @@ def load_local_dataset(data_path, start=0):
             if index < start:
                 continue
             line = json.loads(line)
-            data.append({"prompt": line["prompt"], "source": line["source"]})
+            # data.append({"prompt": line["prompt"], "source": line["source"]})
+            data.append({"prompt": line["prompt"]})
     return data
 
 def load_remote_dataset(data_path, start=0):
