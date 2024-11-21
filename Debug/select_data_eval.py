@@ -28,7 +28,7 @@ def get_train_output():
         output = read_jsonl(output_path)
         train_output.extend(output[:2000])
     for i in range(1):
-        output_path = f"../tinyllamachat_global_step10_gradients_eval_prompt_0/output/output.jsonl"
+        output_path = f"../tinyllamachat_global_step10_gradients_eval_prompt_1/output/output.jsonl"
         output = read_jsonl(output_path)
         train_output.extend(output)
     return train_output
@@ -47,14 +47,14 @@ def get_train_info():
         status = read_jsonl(status_path)
         train_info.extend(status[:2000])
     for i in range(1):
-        status_path = f"../tinyllamachat_global_step10_gradients_eval_prompt_0/status/status.jsonl"
+        status_path = f"../tinyllamachat_global_step10_gradients_eval_prompt_1/status/status.jsonl"
         status = read_jsonl(status_path)
         train_info.extend(status)
     return train_info
 
 
 def get_influence():
-    folder_path = '../eval_influence_0'
+    folder_path = '../eval_influence_1'
     all_scores = []
     for i in range(1):
         file_path = os.path.join(folder_path, f'scores_{i}')
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     # plt.savefig(f'../tmp/self-influence-cosine.png')
     print(eval_output[index]['output'])
     print(eval_info[index])
-    save_path = f"../debug_eval/selected_data_eval_prompt_0"
+    save_path = f"../debug_eval/selected_data_eval_prompt_1"
     os.makedirs(save_path, exist_ok=True)
     with open(os.path.join(save_path, f"eval_num_{index}_reverse_{args.reverse}.jsonl"), 'w') as f:
         for item in sorted_list:
