@@ -45,7 +45,7 @@ def prepare_gradients_evaluation():
         gradients = torch.load(os.path.join(gradients_path, f"gradient_{j+1}.pt"), map_location="cpu")
         # gradients = torch.load(os.path.join(gradients_path, f"gradient_{j+1}.pt"))
         gradients_eval.append(gradients)
-    return gradients_eval[7]
+    return [gradients_eval[7]]
 
 
 def compute_influence(gradients_train, gradients_eval, save_path):
