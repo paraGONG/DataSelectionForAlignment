@@ -107,7 +107,7 @@ if __name__ == '__main__':
     # plt.savefig(f'../tmp/self-influence-cosine.png')
     print(eval_output[index]['output'])
     print(eval_info[index])
-    save_path = f"../debug/selected_data_eval_prompt_0"
+    save_path = f"../debug_eval/selected_data_eval_prompt_0"
     os.makedirs(save_path, exist_ok=True)
     with open(os.path.join(save_path, f"eval_num_{index}_reverse_{args.reverse}.jsonl"), 'w') as f:
         for item in sorted_list:
