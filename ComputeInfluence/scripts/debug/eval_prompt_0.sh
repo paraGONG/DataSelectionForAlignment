@@ -16,7 +16,7 @@ deepspeed --include localhost:0 --master_port 29500 --hostfile=None --module ope
   --actor_learning_rate 5e-4 \
   --critic_learning_rate 5e-4 \
   --init_kl_coef 0.01 \
-  --prompt_data yifangong/split_candidate_eval_prompt_0 \
+  --prompt_data yifangong/eval_prompt_0 \
   --input_key prompt \
   --input_template "<|user|>\n{}</s>\n<|assistant|>\n" \
   --max_samples 100000 \
