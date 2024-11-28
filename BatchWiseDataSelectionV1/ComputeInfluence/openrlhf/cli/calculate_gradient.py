@@ -113,7 +113,7 @@ def train(args):
     )
 
     # get the window
-    prompts_data[args.window_num:args.window_num + args.window_size]
+    prompts_data = prompts_data[args.window_num:args.window_num + args.window_size]
 
     # prompts_data = prompts_data.select(range(min(args.max_samples, len(prompts_data))))
     prompts_dataset = PromptDataset(prompts_data, tokenizer, strategy, input_template=args.input_template)
