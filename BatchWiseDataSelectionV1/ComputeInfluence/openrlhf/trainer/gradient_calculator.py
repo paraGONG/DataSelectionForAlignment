@@ -162,9 +162,9 @@ class GradientCalculator(ABC):
         consumed_samples = consumed_samples % (num_rollouts_per_episodes * args.rollout_batch_size)
 
         # clear
-        self.actor_optim.zero_grad()
-        # self.actor_optim.clear_hp_grads()
-        # self.actor_optim.clear_lp_grads()
+        # self.actor_optim.zero_grad()
+        self.actor_optim.clear_hp_grads()
+        self.actor_optim.clear_lp_grads()
 
         for episode in range(start_episode, args.num_episodes):
             if isinstance(self.prompts_dataloader.sampler, DistributedSampler):
@@ -303,9 +303,9 @@ class GradientCalculator(ABC):
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
         torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{global_step}.pt"))
         # clear gradient
-        # self.actor_optim.clear_hp_grads()
-        # self.actor_optim.clear_lp_grads()
-        self.actor_optim.zero_grad()
+        self.actor_optim.clear_hp_grads()
+        self.actor_optim.clear_lp_grads()
+        # self.actor_optim.zero_grad()
 
         # status
         status = {"policy_loss": actor_loss.item(), "actor_lr": self.actor_scheduler.get_last_lr()[0]}
