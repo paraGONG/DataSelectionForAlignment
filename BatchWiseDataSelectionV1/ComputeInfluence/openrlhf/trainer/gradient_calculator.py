@@ -195,9 +195,9 @@ class GradientCalculator(ABC):
                     torch.cuda.empty_cache()
                     self.replay_buffer.normalize("advantages", self.strategy)
                     status = self.ppo_train(global_steps)
-                    break
                     self.replay_buffer.clear()
                     torch.cuda.empty_cache()
+                    break
 
                     if "kl" in status:
                         self.kl_ctl.update(status["kl"], args.rollout_batch_size)
