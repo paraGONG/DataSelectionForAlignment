@@ -25,7 +25,7 @@ deepspeed --master_port 29500 --hostfile=None --module openrlhf.cli.calculate_gr
   --actor_lora_alpha 16 \
   --critic_lora_rank 8 \
   --critic_lora_alpha 16 \
-  --window_size 8 \
+  --window_size 32 \
   --window_num 0
 
 # openrlhf.cli.calculate_gradient \
