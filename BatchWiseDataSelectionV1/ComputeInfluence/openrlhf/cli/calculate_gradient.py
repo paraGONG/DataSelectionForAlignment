@@ -114,7 +114,7 @@ def train(args):
 
     print(prompts_data)
     # get the window
-    prompts_data = prompts_data.select(args.window_num, args.window_num + args.window_size)
+    prompts_data = prompts_data.select(range(args.window_num, args.window_num + args.window_size))
     print(prompts_data)
 
     # prompts_data = prompts_data.select(range(min(args.max_samples, len(prompts_data))))
