@@ -227,9 +227,12 @@ class GradientCalculator(ABC):
                 desc=f"Train epoch [{epoch + 1}/{self.max_epochs}]",
                 disable=not self.strategy.is_rank_0(),
             )
+            training_step = 0
             for experience in pbar:
                 experience.to_device(device)
-                status = self.training_step(experience, global_steps)
+                status = self.training_step(experience, global_steps + training_step)
+
+                training_step = training_step + 1
 
                 # with open(os.path.join(self.status_save_path, 'status.jsonl'), 'a') as f:
                 #     json.dump(status, f)
@@ -275,12 +278,12 @@ class GradientCalculator(ABC):
                 status_mean[k] /= len(status_list)
         return status_mean
 
-    def training_step(self, experience: Experience, global_steps) -> Dict[str, float]:
+    def training_step(self, experience: Experience, idx) -> Dict[str, float]:
         status = {}
-        status = self.training_step_actor(experience, global_steps)
+        status = self.training_step_actor(experience, idx)
         return status
 
-    def training_step_actor(self, experience: Experience, global_step) -> Dict[str, float]:
+    def training_step_actor(self, experience: Experience, idx) -> Dict[str, float]:
         self.actor.train()
 
         num_actions = experience.action_mask.size(1)
@@ -301,7 +304,7 @@ class GradientCalculator(ABC):
         self.strategy.backward(loss, self.actor, self.actor_optim)
         # save gradient
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
-        torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{global_step}.pt"))
+        torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{idx}.pt"))
         # clear gradient
         self.actor_optim.clear_hp_grads()
         self.actor_optim.clear_lp_grads()

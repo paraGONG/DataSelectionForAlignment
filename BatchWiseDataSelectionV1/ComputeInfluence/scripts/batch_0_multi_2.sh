@@ -6,7 +6,7 @@ deepspeed --master_port 29500 --hostfile=None --module openrlhf.cli.calculate_gr
   --ckpt_tag global_step10 \
   --micro_train_batch_size 1 \
   --train_batch_size 128 \
-  --micro_rollout_batch_size 1 \
+  --micro_rollout_batch_size 8 \
   --rollout_batch_size 512 \
   --max_epochs 1 \
   --prompt_max_len 1024 \
