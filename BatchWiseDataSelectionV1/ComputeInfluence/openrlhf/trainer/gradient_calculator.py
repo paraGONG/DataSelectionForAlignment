@@ -194,7 +194,7 @@ class GradientCalculator(ABC):
             experience = self.experience_maker.make_experience(prompt, **greedy_generate_kwargs)
             output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
             with open(os.path.join(self.output_save_path, 'output.jsonl'), 'a') as f:
-                data = {'output': output[0], 'reward': experience.info.reward}
+                data = {'output': output[0], 'reward': experience.info["reward"]}
                 json.dump(data, f)
                 f.write('\n')
             self.eval_replay_buffer.append(experience)
