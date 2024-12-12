@@ -5,7 +5,7 @@ deepspeed --master_port 29500 --hostfile=None --module openrlhf.cli.calculate_gr
   --ckpt_path ../../../tinyllama-warmup-ckpt \
   --ckpt_tag global_step10 \
   --micro_train_batch_size 1 \
-  --train_batch_size 1 \
+  --train_batch_size 4 \
   --micro_rollout_batch_size 1 \
   --rollout_batch_size 16 \
   --max_epochs 1 \
