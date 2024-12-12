@@ -190,7 +190,7 @@ class GradientCalculator(ABC):
             "lambd": self.generate_kwargs["lambd"]
         }
 
-        for prompt in eval_prompts:
+        for prompt in tqdm(eval_prompts):
             experience = self.experience_maker.make_experience(prompt, **greedy_generate_kwargs)
             output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
             with open(os.path.join(self.output_save_path, 'output.jsonl'), 'a') as f:
@@ -211,7 +211,7 @@ class GradientCalculator(ABC):
         )
         device = torch.cuda.current_device()
 
-        for experience in eval_dataloader:
+        for experience in tqdm(eval_dataloader):
             experience.to_device(device)
             self.actor.train()
 
@@ -237,6 +237,7 @@ class GradientCalculator(ABC):
             self.eval_gradients.append(vectorized_grads)
             # clear gradient
             self.clear_gradient()
+            self.eval_replay_buffer.clear()
         
         torch.cuda.empty_cache()
 
