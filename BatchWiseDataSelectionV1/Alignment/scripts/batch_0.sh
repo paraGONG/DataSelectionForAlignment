@@ -1,16 +1,17 @@
 deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
-  --save_path ../checkpoint/tinyllama_selected_epoch_3 \
-  --ckpt_path  ./tinyllama-warmup-ckpt \
-  --save_steps 40 \
+  --save_path ../checkpoint/tinyllama \
+  --ckpt_path  ../../../tinyllama-warmup-ckpt \
+  --ckpt_tag global_step10 \
+  --save_steps 1 \
   --max_ckpt_num 1000 \
   --logging_steps 1 \
   --eval_steps -1 \
-  --micro_train_batch_size 2 \
-  --train_batch_size 128 \
-  --micro_rollout_batch_size 4 \
-  --rollout_batch_size 512 \
+  --micro_train_batch_size 1 \
+  --train_batch_size 4 \
+  --micro_rollout_batch_size 1 \
+  --rollout_batch_size 16 \
   --max_epochs 1 \
   --prompt_max_len 1024 \
   --generate_max_len 1024 \
@@ -19,16 +20,12 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --actor_learning_rate 5e-4 \
   --critic_learning_rate 5e-4 \
   --init_kl_coef 0.01 \
-  --prompt_data yifangong/selected_dataset \
-  --input_key prompt \
-  --input_template "<|user|>\n{}</s>\n<|assistant|>\n" \
   --max_samples 100000 \
   --load_checkpoint \
   --actor_lora_rank 8 \
   --actor_lora_alpha 16 \
   --critic_lora_rank 8 \
   --critic_lora_alpha 16 \
-  --flash_attn \
-  --use_wandb b7f573ca98ce546e2a92a20e0602f5fb456156f2 \
-  --wandb_project tinyllama_selected_epoch_3 \
-  --wandb_run_name tinyllama_selected_epoch_3
+  --window_num 0 \
+  --select_policy chosen \
+  --buffer_path ../buffer

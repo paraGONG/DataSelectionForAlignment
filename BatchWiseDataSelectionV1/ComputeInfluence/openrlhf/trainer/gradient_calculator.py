@@ -176,7 +176,6 @@ class GradientCalculator(ABC):
             for line in f:
                 data = json.loads(line)
                 eval_prompts.append(data["prompt"])
-                break
         
         greedy_generate_kwargs = {
             "do_sample": False,

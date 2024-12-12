@@ -115,71 +115,20 @@ def train(args):
         critic, lr=args.critic_learning_rate, betas=args.adam_betas, weight_decay=args.l2
     )
 
-    # prepare datasets
-    prompts_data = blending_datasets(
-        args.prompt_data,
-        args.prompt_data_probs,
-        strategy,
-        args.seed,
-        max_count=args.max_samples,
-        return_eval=False,
-        train_split=args.prompt_split,
-    )
-    prompts_data = prompts_data.select(range(min(args.max_samples, len(prompts_data))))
-    prompts_dataset = PromptDataset(prompts_data, tokenizer, strategy, input_template=args.input_template)
-
-    if args.pretrain_data:
-        pretrain_data = blending_datasets(
-            args.pretrain_data,
-            args.pretrain_data_probs,
-            strategy,
-            args.seed,
-            return_eval=False,
-            train_split=args.pretrain_split,
-        )
-        pretrain_max_len = args.max_len if args.max_len else args.prompt_max_len + args.generate_max_len
-        pretrain_dataset = SFTDataset(
-            pretrain_data.select(range(min(len(pretrain_data), args.max_epochs * len(prompts_dataset)))),
-            tokenizer,
-            pretrain_max_len,
-            strategy,
-            pretrain_mode=True,
-        )
-
-    # prepare dataloader
-    prompts_dataloader = strategy.setup_dataloader(prompts_dataset, args.micro_rollout_batch_size, True, True)
-    if args.pretrain_data:
-        pretrain_dataloader = itertools.cycle(
-            iter(
-                strategy.setup_dataloader(
-                    pretrain_dataset,
-                    args.micro_train_batch_size,
-                    True,
-                    True,
-                    pretrain_dataset.collate_fn,
-                )
-            )
-        )
-    else:
-        pretrain_dataloader = None
-
-    # configure scheduler
-    num_update_steps_per_episodes = len(prompts_dataset) // args.train_batch_size * args.max_epochs
-    max_steps = math.ceil(args.num_episodes * num_update_steps_per_episodes)
 
     actor_scheduler = get_scheduler(
         "constant",
         actor_optim,
-        num_warmup_steps=math.ceil(max_steps * 0.03),
-        num_training_steps=max_steps,
+        num_warmup_steps=math.ceil(100 * 0.03),
+        num_training_steps=100,
         scheduler_specific_kwargs={"min_lr": args.actor_learning_rate * 0.1},
     )
 
     critic_scheduler = get_scheduler(
         "constant",
         critic_optim,
-        num_warmup_steps=math.ceil(max_steps * 0.03),
-        num_training_steps=max_steps,
+        num_warmup_steps=math.ceil(100 * 0.03),
+        num_training_steps=100,
         scheduler_specific_kwargs={"min_lr": args.critic_learning_rate * 0.1},
     )
 
@@ -210,6 +159,7 @@ def train(args):
         states["consumed_samples"] = 0
         strategy.print(f"Loaded the checkpoint: {args.ckpt_path}, consumed_samples: {consumed_samples}")
 
+    args.save_path = f"{args.save_path}_win_{args.window_num}_{args.select_policy}"
     os.makedirs(args.save_path, exist_ok=True)
 
     # configure Trainer
@@ -239,6 +189,7 @@ def train(args):
         ema_beta=0.992,
         ptx_coef=args.ptx_coef,
         max_norm=args.max_norm,
+        items_path=os.path.join(args.buffer_path, f"device_{torch.cuda.current_device()}", "items", f"{args.select_policy}_items"),
         # fro GPT generation
         do_sample=True,
         max_new_tokens=args.generate_max_len,
@@ -251,7 +202,7 @@ def train(args):
         remote_rm_url=args.remote_rm_url,
     )
 
-    trainer.fit(args, prompts_dataloader, pretrain_dataloader, consumed_samples, num_update_steps_per_episodes)
+    trainer.fit(args, consumed_samples, num_update_steps_per_episodes=1)
 
     # save model checkpoint after fitting on only rank0
     strategy.save_model(
@@ -383,6 +334,9 @@ if __name__ == "__main__":
         type=str,
         default="ppo_%s" % datetime.now().strftime("%m%dT%H:%M"),
     )
+
+    parser.add_argument("--window_num", type=int, default=0)
+    parser.add_argument("--select_policy", type=str, default=None)
 
     args = parser.parse_args()
 
