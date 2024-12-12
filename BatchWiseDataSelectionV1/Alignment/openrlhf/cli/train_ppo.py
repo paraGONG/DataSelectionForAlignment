@@ -153,8 +153,8 @@ def train(args):
     # load checkpoint
     consumed_samples = 0
     if args.load_checkpoint and os.path.exists(os.path.join(args.ckpt_path, "_actor")):
-        _, states = strategy.load_ckpt(actor.model, os.path.join(args.ckpt_path, "_actor"))
-        strategy.load_ckpt(critic, os.path.join(args.ckpt_path, "_critic"))
+        _, states = strategy.load_ckpt(actor.model, os.path.join(args.ckpt_path, "_actor"), tag=args.ckpt_tag)
+        strategy.load_ckpt(critic, os.path.join(args.ckpt_path, "_critic"), tag=args.ckpt_tag)
         # consumed_samples = 0
         states["consumed_samples"] = 0
         strategy.print(f"Loaded the checkpoint: {args.ckpt_path}, consumed_samples: {consumed_samples}")
@@ -227,6 +227,7 @@ if __name__ == "__main__":
     parser.add_argument("--logging_steps", type=int, default=1)
     parser.add_argument("--eval_steps", type=int, default=-1)
     parser.add_argument("--ckpt_path", type=str, default="./ckpt/checkpoints_ppo")
+    parser.add_argument("--ckpt_tag", type=str, default=None)
     parser.add_argument("--max_ckpt_num", type=int, default=3)
     parser.add_argument("--max_ckpt_mem", type=int, default=1e8)
     parser.add_argument("--load_checkpoint", action="store_true", default=False)
@@ -337,6 +338,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--window_num", type=int, default=0)
     parser.add_argument("--select_policy", type=str, default=None)
+    parser.add_argument("--buffer_path", type=str, default="../buffer")
 
     args = parser.parse_args()
 
