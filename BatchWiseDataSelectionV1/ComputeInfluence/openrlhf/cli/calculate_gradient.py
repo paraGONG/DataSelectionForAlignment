@@ -191,6 +191,7 @@ def train(args):
         ptx_coef=args.ptx_coef,
         max_norm=args.max_norm,
         save_path=os.path.join(args.save_path, f"window_{args.window_num}"),
+        eval_data_path=args.evaluation_data_path,
         # fro GPT generation
         do_sample=True,
         max_new_tokens=args.generate_max_len,

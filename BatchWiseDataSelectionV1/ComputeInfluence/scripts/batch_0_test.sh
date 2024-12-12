@@ -27,7 +27,7 @@ deepspeed --master_port 29500 --hostfile=None --module openrlhf.cli.calculate_gr
   --critic_lora_alpha 16 \
   --window_size 16 \
   --window_num 0 \
-  --evaluation_data_path ../../../
+  --evaluation_data_path ../../../evaluation_data.jsonl
 
 # openrlhf.cli.calculate_gradient \
 #    --pretrain /root/siton-object-46b8630eb56e449886cb89943ab6fe10/models/TinyLlama/TinyLlama_v1.1 \

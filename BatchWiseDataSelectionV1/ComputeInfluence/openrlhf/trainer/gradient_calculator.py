@@ -72,6 +72,7 @@ class GradientCalculator(ABC):
         max_epochs: int = 1,
         max_norm: float = 1.0,
         save_path: str = None,
+        eval_data_path: str = None,
         tokenizer: Optional[Callable[[Any], dict]] = None,
         prompt_max_len: int = 128,
         dataloader_pin_memory: bool = True,
@@ -131,7 +132,8 @@ class GradientCalculator(ABC):
             reward_fn,
         )
         self.replay_buffer = NaiveReplayBuffer(micro_train_batch_size, buffer_limit, buffer_cpu_offload)
-        
+        self.eval_replay_buffer = NaiveReplayBuffer(micro_train_batch_size, buffer_limit, buffer_cpu_offload)
+        self.eval_data_path = eval_data_path
         self.save_path = os.path.join(save_path, f"device_{torch.cuda.current_device()}")
         os.makedirs(self.save_path, exist_ok=True)
         self.gradients_save_path = os.path.join(self.save_path, 'gradients')
@@ -141,6 +143,8 @@ class GradientCalculator(ABC):
         os.makedirs(self.output_save_path, exist_ok=True)
         os.makedirs(self.status_save_path, exist_ok=True)
 
+        self.eval_gradients = []
+        self.influence_scores = []
 
     def fit(
         self,
@@ -161,10 +165,74 @@ class GradientCalculator(ABC):
         start_episode = consumed_samples // args.rollout_batch_size // num_rollouts_per_episodes
         consumed_samples = consumed_samples % (num_rollouts_per_episodes * args.rollout_batch_size)
 
+
+        # prepare eval data
+        eval_prompts = []
+        with open(self.eval_data_path, "r", encoding="utf-8") as f:
+            for line in f:
+                data = json.loads(line)
+                eval_prompts.append(data["prompt"])
+        
+        greedy_generate_kwargs = {
+            "do_sample": False,
+            "max_new_tokens": args.generate_max_len,
+            "max_length": args.max_len,
+            "temperature": 1.0,
+            "top_p": 1.0,
+            "pad_token_id": self.tokenizer.pad_token_id,
+            "eos_token_id": self.tokenizer.eos_token_id
+        }
+
+        for prompt in eval_prompts:
+            experience = self.experience_maker.make_experience(prompt, **greedy_generate_kwargs)
+            self.eval_replay_buffer.append(experience)
+
+        # compute eval gratients
+        torch.cuda.empty_cache()
+        eval_dataloader = DataLoader(
+            self.eval_replay_buffer,
+            batch_size=self.eval_replay_buffer.sample_batch_size,
+            shuffle=False,
+            drop_last=False,
+            pin_memory=self.dataloader_pin_memory,
+            collate_fn=self.eval_replay_buffer.collate_fn,
+        )
+        device = torch.cuda.current_device()
+
+        for experience in eval_dataloader:
+            experience.to_device(device)
+            self.actor.train()
+
+            num_actions = experience.action_mask.size(1)
+            # actor loss
+            action_log_probs, output = self.actor(
+                experience.sequences, num_actions, attention_mask=experience.attention_mask, return_output=True
+            )
+
+            # loss function
+            actor_loss = self.actor_loss_fn(
+                action_log_probs,
+                experience.action_log_probs,
+                experience.advantages,
+                action_mask=experience.action_mask,
+            )
+
+            loss = actor_loss
+            self.actor_optim.backward(loss, self.actor, self.actor_optim)
+            # save gradient
+            vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
+            self.eval_gradients.append(vectorized_grads)
+            # clear gradient
+            self.clear_gradient()
+            # self.actor_optim.clear_hp_grads()
+            # self.actor_optim.clear_lp_grads()
+        
+        torch.cuda.empty_cache()
+
         # clear
         # self.actor_optim.zero_grad()
-        self.actor_optim.clear_hp_grads()
-        self.actor_optim.clear_lp_grads()
+        # self.actor_optim.clear_hp_grads()
+        # self.actor_optim.clear_lp_grads()
 
         for episode in range(start_episode, args.num_episodes):
             if isinstance(self.prompts_dataloader.sampler, DistributedSampler):
@@ -196,7 +264,7 @@ class GradientCalculator(ABC):
                     self.replay_buffer.normalize("advantages", self.strategy)
                     # torch.save(self.replay_buffer.items, os.path.join(self.output_save_path, 'buffer_items.pth'))
                     status = self.ppo_train(global_steps)
-                    
+
                     self.replay_buffer.clear()
                     torch.cuda.empty_cache()
 
@@ -208,6 +276,8 @@ class GradientCalculator(ABC):
                     client_states = {"consumed_samples": global_steps * args.rollout_batch_size}
                 pbar.update()
                 steps = steps + 1
+
+        print(self.influence_scores)
 
     def ppo_train(self, global_steps=0):
         # replay buffer may be empty at first, we should rebuild at each training
@@ -303,13 +373,19 @@ class GradientCalculator(ABC):
         )
 
         loss = actor_loss
-        self.strategy.backward(loss, self.actor, self.actor_optim)
+        # self.strategy.backward(loss, self.actor, self.actor_optim)
+        self.actor_optim.backward(loss, self.actor, self.actor_optim)
         # save gradient
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
-        torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{idx}.pt"))
+        influences = [torch.dot(vectorized_grads, g) for g in self.eval_gradients]
+        mean_influences = torch.mean(torch.tensor(influences))
+        self.influence_scores.append(mean_influences)
+
+        # torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{idx}.pt"))
         # clear gradient
-        self.actor_optim.clear_hp_grads()
-        self.actor_optim.clear_lp_grads()
+        self.clear_gradient()
+        # self.actor_optim.clear_hp_grads()
+        # self.actor_optim.clear_lp_grads()
         # self.actor_optim.zero_grad()
 
         # status
@@ -322,3 +398,16 @@ class GradientCalculator(ABC):
             else:
                 status[k] = v.mean().item()
         return status
+    
+    def clear_gradient(self):
+        if self.actor.bfloat16_enabled():
+            # TODO: Temporary until bf16_optimizer and zero_optimizer are integrated
+            if self.actor.zero_optimization() and hasattr(self.actor.optimizer, "zero_grad"):
+                self.actor.optimizer.zero_grad()
+            else:
+                pass
+        elif self.actor.zero_optimization() or self.actor.fp16_enabled() or self.actor.amp_enabled():
+            self.actor.optimizer.zero_grad()
+        else:
+            for param_name, param in self.actor.module.named_parameters():
+                param.grad = None
