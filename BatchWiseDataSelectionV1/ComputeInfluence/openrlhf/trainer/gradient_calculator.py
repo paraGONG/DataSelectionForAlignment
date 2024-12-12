@@ -210,7 +210,8 @@ class GradientCalculator(ABC):
             collate_fn=self.eval_replay_buffer.collate_fn,
         )
         device = torch.cuda.current_device()
-
+        print(self.eval_replay_buffer.items)
+        print(len(self.eval_replay_buffer.items))
         for experience in tqdm(eval_dataloader):
             experience.to_device(device)
             self.actor.train()
