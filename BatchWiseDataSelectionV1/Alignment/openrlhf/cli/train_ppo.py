@@ -189,7 +189,7 @@ def train(args):
         ema_beta=0.992,
         ptx_coef=args.ptx_coef,
         max_norm=args.max_norm,
-        items_path=os.path.join(args.buffer_path, f"device_{torch.cuda.current_device()}", "items", f"{args.select_policy}_items"),
+        items_path=os.path.join(args.buffer_path, f"device_{torch.cuda.current_device()}", f"window_{args.window_num}","items", f"{args.select_policy}_items"),
         # fro GPT generation
         do_sample=True,
         max_new_tokens=args.generate_max_len,
