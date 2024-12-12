@@ -185,7 +185,7 @@ class PPOTrainer(ABC):
 
             # logs/checkpoints
             client_states = {"consumed_samples": global_steps * args.rollout_batch_size}
-            self.save_logs_and_checkpoints(args, global_steps, pbar, status, client_states)
+            self.save_logs_and_checkpoints(args, global_steps, status, client_states)
 
             steps = steps + 1
 
