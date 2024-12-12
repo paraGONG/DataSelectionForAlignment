@@ -191,7 +191,7 @@ def train(args):
         kl_target=args.kl_target,
         ptx_coef=args.ptx_coef,
         max_norm=args.max_norm,
-        save_path=os.path.join(args.save_path, f"window_{args.window_num}"),
+        save_path=os.path.join(args.save_path, f"window_{args.window_num}_{args.select_policy}"),
         eval_data_path=args.evaluation_data_path,
         # fro GPT generation
         do_sample=True,

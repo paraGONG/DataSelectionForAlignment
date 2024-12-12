@@ -150,6 +150,7 @@ def train(args):
         ema_model._offload = True
         ema_model = strategy.prepare(ema_model, is_rlhf=True)
 
+    args.ckpt_path = f"../checkpoint/tinyllama_win_{args.window_num-1}_{args.select_policy}_ckpt/"
     # load checkpoint
     consumed_samples = 0
     if args.load_checkpoint and os.path.exists(os.path.join(args.ckpt_path, "_actor")):
@@ -188,7 +189,7 @@ def train(args):
         ema_beta=0.992,
         ptx_coef=args.ptx_coef,
         max_norm=args.max_norm,
-        items_path=os.path.join(args.buffer_path, f"window_{args.window_num}", f"device_{torch.cuda.current_device()}", "items", f"{args.select_policy}_items.pth"),
+        items_path=os.path.join(args.buffer_path, f"window_{args.window_num}_{args.select_policy}", f"device_{torch.cuda.current_device()}", "items", f"{args.select_policy}_items.pth"),
         # fro GPT generation
         do_sample=True,
         max_new_tokens=args.generate_max_len,
