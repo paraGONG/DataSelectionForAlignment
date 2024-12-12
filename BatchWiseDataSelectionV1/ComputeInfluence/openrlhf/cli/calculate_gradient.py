@@ -158,7 +158,7 @@ def train(args):
 
     # load checkpoint
     consumed_samples = 0
-    
+    args.ckpt_path = f"../checkpoint/tinyllama_win_{args.window_num-1}_{args.select_policy}_ckpt"
     # if args.load_checkpoint and os.path.exists(os.path.join(args.ckpt_path, "_actor")):
     _, states = strategy.load_ckpt(actor.model, os.path.join(args.ckpt_path, "_actor"), tag=args.ckpt_tag, load_module_only=True)
     strategy.load_ckpt(critic, os.path.join(args.ckpt_path, "_critic"), tag=args.ckpt_tag, load_module_only=True)
@@ -303,6 +303,7 @@ if __name__ == "__main__":
 
     # evaluation data path
     parser.add_argument("--evaluation_data_path", type=str, default=None)
+    parser.add_argument("--select_policy", type=str, default=None)
 
     args = parser.parse_args()
 
