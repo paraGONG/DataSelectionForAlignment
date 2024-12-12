@@ -172,6 +172,7 @@ class GradientCalculator(ABC):
             for line in f:
                 data = json.loads(line)
                 eval_prompts.append(data["prompt"])
+                break
         
         greedy_generate_kwargs = {
             "do_sample": False,
@@ -402,14 +403,14 @@ class GradientCalculator(ABC):
         return status
     
     def clear_gradient(self):
-        if self.actor.bfloat16_enabled():
+        if self.actor.model.bfloat16_enabled():
             # TODO: Temporary until bf16_optimizer and zero_optimizer are integrated
-            if self.actor.zero_optimization() and hasattr(self.actor.optimizer, "zero_grad"):
-                self.actor.optimizer.zero_grad()
+            if self.actor.model.zero_optimization() and hasattr(self.actor.model.optimizer, "zero_grad"):
+                self.actor.model.optimizer.zero_grad()
             else:
                 pass
-        elif self.actor.zero_optimization() or self.actor.fp16_enabled() or self.actor.amp_enabled():
-            self.actor.optimizer.zero_grad()
+        elif self.actor.model.zero_optimization() or self.actor.model.fp16_enabled() or self.actor.model.amp_enabled():
+            self.actor.model.optimizer.zero_grad()
         else:
-            for param_name, param in self.actor.module.named_parameters():
+            for param_name, param in self.actor.model.module.named_parameters():
                 param.grad = None
