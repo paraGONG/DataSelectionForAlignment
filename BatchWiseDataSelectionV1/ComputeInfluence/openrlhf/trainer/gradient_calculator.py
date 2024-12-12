@@ -162,7 +162,7 @@ class GradientCalculator(ABC):
         # )
         update_timesteps = args.rollout_batch_size // (self.strategy.world_size * self.micro_rollout_batch_size)
 
-        # self.prompts_dataloader = prompts_dataloader
+        self.prompts_dataloader = prompts_dataloader
 
         # # Restore step and start_epoch
         # steps = consumed_samples // args.rollout_batch_size * update_timesteps + 1
