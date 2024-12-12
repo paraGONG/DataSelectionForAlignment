@@ -180,13 +180,13 @@ class GradientCalculator(ABC):
             for rand_prompts in self.prompts_dataloader:
                 experience = self.experience_maker.make_experience(rand_prompts, **self.generate_kwargs)
                 # print prompt/answer in each update step
-                # if steps % update_timesteps == 0:
-                #     output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
-                #     with open(os.path.join(self.output_save_path, 'output.jsonl'), 'a') as f:
-                #         data = {'output': output[0]}
-                #         json.dump(data, f)
-                #         f.write('\n')
-                #     self.strategy.print(output[0])
+                if steps % update_timesteps == 0:
+                    output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
+                    with open(os.path.join(self.output_save_path, 'output.jsonl'), 'a') as f:
+                        data = {'output': output[0]}
+                        json.dump(data, f)
+                        f.write('\n')
+                    self.strategy.print(output[0])
                 self.replay_buffer.append(experience)
 
                 if steps % update_timesteps == 0:
@@ -234,9 +234,9 @@ class GradientCalculator(ABC):
 
                 training_step = training_step + 1
 
-                # with open(os.path.join(self.status_save_path, 'status.jsonl'), 'a') as f:
-                #     json.dump(status, f)
-                #     f.write('\n')
+                with open(os.path.join(self.status_save_path, 'status.jsonl'), 'a') as f:
+                    json.dump(status, f)
+                    f.write('\n')
 
                 # for DP
                 # weighted mean for kl
