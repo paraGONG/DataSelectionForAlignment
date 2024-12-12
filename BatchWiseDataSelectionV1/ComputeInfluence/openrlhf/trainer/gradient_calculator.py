@@ -236,8 +236,8 @@ class GradientCalculator(ABC):
             self.eval_gradients.append(vectorized_grads)
             # clear gradient
             self.clear_gradient()
-            self.eval_replay_buffer.clear()
-        
+
+        self.eval_replay_buffer.clear()        
         torch.cuda.empty_cache()
 
 
