@@ -187,7 +187,6 @@ class PPOTrainer(ABC):
             client_states = {"consumed_samples": global_steps * args.rollout_batch_size}
             self.save_logs_and_checkpoints(args, global_steps, status, client_states)
 
-            steps = steps + 1
 
     def ppo_train(self, global_steps=0):
         # replay buffer may be empty at first, we should rebuild at each training
