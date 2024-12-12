@@ -17,7 +17,9 @@ from openrlhf.models.utils import masked_mean
 from openrlhf.utils.distributed_sampler import DistributedSampler
 
 from .ppo_utils import AdaptiveKLController, Experience, FixedKLController, NaiveExperienceMaker, NaiveReplayBuffer
+import random
 
+random.seed(42)
 
 class GradientCalculator(ABC):
     """
@@ -139,9 +141,11 @@ class GradientCalculator(ABC):
         self.gradients_save_path = os.path.join(self.save_path, 'gradients')
         self.output_save_path = os.path.join(self.save_path, 'output')
         self.status_save_path = os.path.join(self.save_path, 'status')
+        self.items_save_path = os.path.join(self.save_path, 'items')
         os.makedirs(self.gradients_save_path, exist_ok=True)
         os.makedirs(self.output_save_path, exist_ok=True)
         os.makedirs(self.status_save_path, exist_ok=True)
+        os.makedirs(self.items_save_path, exist_ok=True)
 
         self.eval_gradients = []
         self.influence_scores = []
@@ -228,15 +232,9 @@ class GradientCalculator(ABC):
             self.eval_gradients.append(vectorized_grads)
             # clear gradient
             self.clear_gradient()
-            # self.actor_optim.clear_hp_grads()
-            # self.actor_optim.clear_lp_grads()
         
         torch.cuda.empty_cache()
 
-        # clear
-        # self.actor_optim.zero_grad()
-        # self.actor_optim.clear_hp_grads()
-        # self.actor_optim.clear_lp_grads()
 
         for episode in range(start_episode, args.num_episodes):
             if isinstance(self.prompts_dataloader.sampler, DistributedSampler):
@@ -267,8 +265,21 @@ class GradientCalculator(ABC):
                     torch.cuda.empty_cache()
                     self.replay_buffer.normalize("advantages", self.strategy)
                     # torch.save(self.replay_buffer.items, os.path.join(self.output_save_path, 'buffer_items.pth'))
+                    items = self.replay_buffer.items
+                    zipped = list(zip(self.influence_scores, items))
+                    sorted_zipped = sorted(zipped, key=lambda x: x[0], reverse=True)
+                    sorted_numbers, sorted_items = zip(*sorted_zipped)
+                    sorted_items = list(sorted_items)
+                    chose_size = len(sorted_items) // 4
+                    chosen_items = sorted_items[:chose_size]
+                    rejected_items = sorted_items[-chose_size:]
+                    random_items = random.sample(sorted_items, chose_size)
+                    print(len(chosen_items))
+                    torch.save(chosen_items, os.path.join(self.items_save_path, 'chosen_items.pth'))
+                    torch.save(rejected_items, os.path.join(self.items_save_path, 'rejected_items.pth'))
+                    torch.save(random_items, os.path.join(self.items_save_path, 'random_items.pth'))
+                    
                     status = self.ppo_train(global_steps)
-
                     self.replay_buffer.clear()
                     torch.cuda.empty_cache()
 
@@ -281,7 +292,6 @@ class GradientCalculator(ABC):
                 pbar.update()
                 steps = steps + 1
 
-        print(self.influence_scores)
 
     def ppo_train(self, global_steps=0):
         # replay buffer may be empty at first, we should rebuild at each training
@@ -389,9 +399,6 @@ class GradientCalculator(ABC):
         # torch.save(vectorized_grads, os.path.join(self.gradients_save_path, f"gradient_{idx}.pt"))
         # clear gradient
         self.clear_gradient()
-        # self.actor_optim.clear_hp_grads()
-        # self.actor_optim.clear_lp_grads()
-        # self.actor_optim.zero_grad()
 
         # status
         status = {"policy_loss": actor_loss.item(), "actor_lr": self.actor_scheduler.get_last_lr()[0]}
