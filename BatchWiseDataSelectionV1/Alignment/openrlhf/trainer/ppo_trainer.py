@@ -172,7 +172,6 @@ class PPOTrainer(ABC):
             start_episode = 0
             items = torch.load(os.path.join(self.items_path))
             print(len(items))
-            return
             self.replay_buffer.items = items
             global_steps = 1
 
@@ -360,12 +359,12 @@ class PPOTrainer(ABC):
     def _save_checkpoint(self, args, tag, client_states):
         self.strategy.save_ckpt(
             self.actor.model,
-            os.path.join(args.ckpt_path, "_actor"),
+            os.path.join(f"{args.save_path}_ckpt", "_actor"),
             tag,
             args.max_ckpt_num,
             args.max_ckpt_mem,
             client_states,
         )
         self.strategy.save_ckpt(
-            self.critic, os.path.join(args.ckpt_path, "_critic"), tag, args.max_ckpt_num, args.max_ckpt_mem
+            self.critic, os.path.join(f"{args.save_path}_ckpt", "_critic"), tag, args.max_ckpt_num, args.max_ckpt_mem
         )
