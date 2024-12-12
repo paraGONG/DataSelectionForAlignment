@@ -25,5 +25,5 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --critic_lora_rank 8 \
   --critic_lora_alpha 16 \
   --window_num 1 \
-  --select_policy chosen \
+  --select_policy rejected \
   --buffer_path ../buffer
