@@ -284,38 +284,12 @@ class PPOTrainer(ABC):
         loss = actor_loss + aux_loss * self.args.aux_loss_coef
         self.strategy.backward(loss, self.actor, self.actor_optim)
 
-        # ptx loss
-        if self.pretrain_dataloader is not None:
-            data = next(self.pretrain_dataloader)
-            inputs = data[1].squeeze(1).to(torch.cuda.current_device())
-            attention_mask = data[2].squeeze(1).to(torch.cuda.current_device())
-            label = torch.where(
-                attention_mask.bool(),
-                inputs,
-                self.ptx_loss_fn.IGNORE_INDEX,
-            )
-
-            output = self.actor(inputs, attention_mask=attention_mask, return_output=True)
-            ptx_log_probs = output["logits"]
-
-            # loss function
-            ptx_loss = self.ptx_loss_fn(ptx_log_probs, label)
-            # mixtral
-            if self.aux_loss:
-                aux_loss = output.aux_loss
-            else:
-                aux_loss = 0
-            loss = ptx_loss + aux_loss * self.args.aux_loss_coef
-            self.strategy.backward(self.ptx_coef * loss, self.actor, self.actor_optim)
-
         self.strategy.optimizer_step(self.actor_optim, self.actor, self.actor_scheduler, name="actor")
         if self.ema_model:
             self.strategy.moving_average(self.actor, self.ema_model, self.ema_beta, "cpu")
 
         # status
         status = {"policy_loss": actor_loss.item(), "actor_lr": self.actor_scheduler.get_last_lr()[0]}
-        if self.pretrain_dataloader is not None:
-            status["ptx_loss"] = ptx_loss.item()
         for k, v in experience.info.items():
             if k == "kl":
                 status[k] = (
