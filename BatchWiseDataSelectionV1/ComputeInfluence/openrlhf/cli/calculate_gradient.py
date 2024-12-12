@@ -211,7 +211,7 @@ if __name__ == "__main__":
     # Checkpoint
     parser.add_argument("--save_path", type=str, default="./gradients")
     parser.add_argument("--ckpt_path", type=str, default="./ckpt/checkpoints_ppo")
-    parser.add_argument("--ckpt_tag", type=str, default="global_step10")
+    parser.add_argument("--ckpt_tag", type=str, default=None)
     parser.add_argument("--load_checkpoint", action="store_true", default=False)
 
     # PPO
