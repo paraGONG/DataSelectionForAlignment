@@ -160,7 +160,7 @@ class GradientCalculator(ABC):
         # num_rollouts_per_episodes = (
         #     num_update_steps_per_episodes * args.train_batch_size // args.max_epochs // args.rollout_batch_size
         # )
-        # update_timesteps = args.rollout_batch_size // (self.strategy.world_size * self.micro_rollout_batch_size)
+        update_timesteps = args.rollout_batch_size // (self.strategy.world_size * self.micro_rollout_batch_size)
 
         # self.prompts_dataloader = prompts_dataloader
 
@@ -168,7 +168,8 @@ class GradientCalculator(ABC):
         # steps = consumed_samples // args.rollout_batch_size * update_timesteps + 1
         # start_episode = consumed_samples // args.rollout_batch_size // num_rollouts_per_episodes
         # consumed_samples = consumed_samples % (num_rollouts_per_episodes * args.rollout_batch_size)
-
+        steps = 1
+        start_episode = 0
 
         # prepare eval data
         eval_prompts = []
