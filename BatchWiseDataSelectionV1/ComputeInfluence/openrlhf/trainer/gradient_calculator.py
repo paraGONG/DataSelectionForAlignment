@@ -192,6 +192,11 @@ class GradientCalculator(ABC):
 
         for prompt in eval_prompts:
             experience = self.experience_maker.make_experience(prompt, **greedy_generate_kwargs)
+            output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
+            with open(os.path.join(self.output_save_path, 'output.jsonl'), 'a') as f:
+                data = {'output': output[0]}
+                json.dump(data, f)
+                f.write('\n')
             self.eval_replay_buffer.append(experience)
 
         # compute eval gratients
@@ -266,6 +271,9 @@ class GradientCalculator(ABC):
                     self.replay_buffer.normalize("advantages", self.strategy)
                     # torch.save(self.replay_buffer.items, os.path.join(self.output_save_path, 'buffer_items.pth'))
                     items = self.replay_buffer.items
+                    print(items)
+                    print(len(items))
+                    print(self.influence_scores)
                     zipped = list(zip(self.influence_scores, items))
                     sorted_zipped = sorted(zipped, key=lambda x: x[0], reverse=True)
                     sorted_numbers, sorted_items = zip(*sorted_zipped)
