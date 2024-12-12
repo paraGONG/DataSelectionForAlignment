@@ -194,7 +194,7 @@ class GradientCalculator(ABC):
             experience = self.experience_maker.make_experience(prompt, **greedy_generate_kwargs)
             output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
             with open(os.path.join(self.output_save_path, 'output.jsonl'), 'a') as f:
-                data = {'output': output[0]}
+                data = {'output': output[0], 'reward': experience.info.reward}
                 json.dump(data, f)
                 f.write('\n')
             self.eval_replay_buffer.append(experience)
@@ -233,7 +233,7 @@ class GradientCalculator(ABC):
             self.actor.model.optimizer.backward(loss)
             # save gradient
             vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
-            print(vectorized_grads)
+            # print(vectorized_grads)
             self.eval_gradients.append(vectorized_grads)
             # clear gradient
             self.clear_gradient()
@@ -268,12 +268,10 @@ class GradientCalculator(ABC):
                     global_steps = steps // update_timesteps
 
                     torch.cuda.empty_cache()
-                    self.replay_buffer.normalize("advantages", self.strategy)
+                    self.replay_buffer.normalize("advantages", self.strategy)  
                     # torch.save(self.replay_buffer.items, os.path.join(self.output_save_path, 'buffer_items.pth'))
                     items = self.replay_buffer.items
-                    print(items)
-                    print(len(items))
-                    print(self.influence_scores)
+                    status = self.ppo_train(global_steps)
                     zipped = list(zip(self.influence_scores, items))
                     sorted_zipped = sorted(zipped, key=lambda x: x[0], reverse=True)
                     sorted_numbers, sorted_items = zip(*sorted_zipped)
@@ -282,12 +280,11 @@ class GradientCalculator(ABC):
                     chosen_items = sorted_items[:chose_size]
                     rejected_items = sorted_items[-chose_size:]
                     random_items = random.sample(sorted_items, chose_size)
-                    print(len(chosen_items))
+                    # print(len(chosen_items))
                     torch.save(chosen_items, os.path.join(self.items_save_path, 'chosen_items.pth'))
                     torch.save(rejected_items, os.path.join(self.items_save_path, 'rejected_items.pth'))
                     torch.save(random_items, os.path.join(self.items_save_path, 'random_items.pth'))
                     
-                    status = self.ppo_train(global_steps)
                     self.replay_buffer.clear()
                     torch.cuda.empty_cache()
 
@@ -399,7 +396,7 @@ class GradientCalculator(ABC):
         self.actor.model.optimizer.backward(loss)
         # save gradient
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
-        print(vectorized_grads)
+        # print(vectorized_grads)
         influences = [torch.dot(vectorized_grads, g) for g in self.eval_gradients]
         mean_influences = torch.mean(torch.tensor(influences))
         self.influence_scores.append(mean_influences)
