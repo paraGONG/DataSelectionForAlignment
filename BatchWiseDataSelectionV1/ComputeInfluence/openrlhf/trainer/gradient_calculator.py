@@ -180,7 +180,9 @@ class GradientCalculator(ABC):
             "temperature": 1.0,
             "top_p": 1.0,
             "pad_token_id": self.tokenizer.pad_token_id,
-            "eos_token_id": self.tokenizer.eos_token_id
+            "eos_token_id": self.tokenizer.eos_token_id,
+            "gamma": self.generate_kwargs['gamma'],
+            "lambd": self.generate_kwargs["lambd"]
         }
 
         for prompt in eval_prompts:
