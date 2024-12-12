@@ -171,7 +171,6 @@ class PPOTrainer(ABC):
     ) -> None:
             start_episode = 0
             items = torch.load(os.path.join(self.items_path))
-            print(len(items))
             self.replay_buffer.items = items
             global_steps = 1
 

@@ -161,7 +161,6 @@ def train(args):
 
     args.save_path = f"{args.save_path}_win_{args.window_num}_{args.select_policy}"
     os.makedirs(args.save_path, exist_ok=True)
-
     # configure Trainer
     trainer = PPOTrainer(
         strategy,
