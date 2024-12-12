@@ -221,7 +221,7 @@ class GradientCalculator(ABC):
             )
 
             loss = actor_loss
-            self.actor_optim.backward(loss, self.actor, self.actor_optim)
+            self.actor.model.optimizer.backward(loss)
             # save gradient
             vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
             print(vectorized_grads)
@@ -378,7 +378,7 @@ class GradientCalculator(ABC):
 
         loss = actor_loss
         # self.strategy.backward(loss, self.actor, self.actor_optim)
-        self.strategy.backward(loss, self.actor, self.actor_optim)
+        self.actor.model.optimizer.backward(loss)
         # save gradient
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
         print(vectorized_grads)
