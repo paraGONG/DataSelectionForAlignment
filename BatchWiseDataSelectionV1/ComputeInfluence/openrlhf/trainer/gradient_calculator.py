@@ -224,6 +224,7 @@ class GradientCalculator(ABC):
             self.actor_optim.backward(loss, self.actor, self.actor_optim)
             # save gradient
             vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
+            print(vectorized_grads)
             self.eval_gradients.append(vectorized_grads)
             # clear gradient
             self.clear_gradient()
@@ -380,6 +381,7 @@ class GradientCalculator(ABC):
         self.actor_optim.backward(loss, self.actor, self.actor_optim)
         # save gradient
         vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
+        print(vectorized_grads)
         influences = [torch.dot(vectorized_grads, g) for g in self.eval_gradients]
         mean_influences = torch.mean(torch.tensor(influences))
         self.influence_scores.append(mean_influences)
