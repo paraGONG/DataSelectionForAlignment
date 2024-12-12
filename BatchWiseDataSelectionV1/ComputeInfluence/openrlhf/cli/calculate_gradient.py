@@ -300,6 +300,9 @@ if __name__ == "__main__":
     parser.add_argument("--window_size", type=int, default=1024)
     parser.add_argument("--window_num", type=int, default=0)
 
+    # evaluation data path
+    parser.add_argument("--evaluation_data_path", type=str, default=None)
+
     args = parser.parse_args()
 
     if args.critic_pretrain is None:

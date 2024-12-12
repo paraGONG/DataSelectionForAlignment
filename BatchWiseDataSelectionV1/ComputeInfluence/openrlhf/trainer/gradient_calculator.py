@@ -194,9 +194,9 @@ class GradientCalculator(ABC):
 
                     torch.cuda.empty_cache()
                     self.replay_buffer.normalize("advantages", self.strategy)
-                    print(self.replay_buffer.items)
-                    torch.save(self.replay_buffer.items, os.path.join(self.output_save_path, 'buffer_items.pth'))
+                    # torch.save(self.replay_buffer.items, os.path.join(self.output_save_path, 'buffer_items.pth'))
                     status = self.ppo_train(global_steps)
+                    
                     self.replay_buffer.clear()
                     torch.cuda.empty_cache()
 
