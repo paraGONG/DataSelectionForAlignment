@@ -14,7 +14,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     rewards = []
-    with open(f"../buffer/window_{args.window_num}_{args.select_policy}/device_0/output/output.jsonl", 'r') as f:
+    with open(f"../buffer/window_{args.window_num}/device_0/output/output.jsonl", 'r') as f:
         for line in f:
             data = json.loads(line)
             if 'reward' in data:
