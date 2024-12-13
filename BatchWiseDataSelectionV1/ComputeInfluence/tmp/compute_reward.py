@@ -10,12 +10,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--window_num", type=int, default=0)
     parser.add_argument("--select_policy", type=str, default=None)
-    parser.add_argument("--buffer_path", type=str, default="../buffer")
 
     args = parser.parse_args()
 
     rewards = []
-    with open("", 'r') as f:
+    with open(f"../../buffer/window_{args.window_num}_{args.select_policy}/device_0/output/output.jsonl", 'r') as f:
         for line in f:
             data = json.loads(line)
             if 'reward' in data:
