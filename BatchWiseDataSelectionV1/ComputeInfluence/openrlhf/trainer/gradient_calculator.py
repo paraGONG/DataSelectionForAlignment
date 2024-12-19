@@ -240,7 +240,7 @@ class GradientCalculator(ABC):
         self.eval_replay_buffer.clear()        
         torch.cuda.empty_cache()
 
-        return
+        # return
 
 
         for episode in range(start_episode, args.num_episodes):
