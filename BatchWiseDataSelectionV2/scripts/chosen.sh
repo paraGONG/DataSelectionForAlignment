@@ -1,9 +1,9 @@
 deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
-  --save_path ../checkpoint/selectionv2 \
+  --save_path ../checkpoint/selectionv2_chosen \
   --ckpt_path  ../../../tinyllama-warmup-ckpt  \
-  --save_steps 40 \
+  --save_steps 10 \
   --max_ckpt_num 1000 \
   --logging_steps 1 \
   --eval_steps -1 \
