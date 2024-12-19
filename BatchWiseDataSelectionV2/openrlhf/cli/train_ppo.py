@@ -259,14 +259,14 @@ def train(args):
     strategy.save_model(
         ema_model if args.enable_ema else actor,
         tokenizer,
-        args.save_path,
+        os.path.join(args.save_path, "final_actor_model"),
     )
 
     if args.save_value_network:
         strategy.save_model(
             critic,
             tokenizer,
-            args.save_path + "_critic",
+            os.path.join(args.save_path, "final_critic_model"),
         )
 
 

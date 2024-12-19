@@ -446,14 +446,14 @@ class PPOTrainer(ABC):
     def _save_checkpoint(self, args, tag, client_states):
         self.strategy.save_ckpt(
             self.actor.model,
-            os.path.join(args.ckpt_path, "_actor"),
+            os.path.join(args.save_path, "ckpt", "_actor"),
             tag,
             args.max_ckpt_num,
             args.max_ckpt_mem,
             client_states,
         )
         self.strategy.save_ckpt(
-            self.critic, os.path.join(args.ckpt_path, "_critic"), tag, args.max_ckpt_num, args.max_ckpt_mem
+            self.critic, os.path.join(args.save_path, "ckpt", "_critic"), tag, args.max_ckpt_num, args.max_ckpt_mem
         )
 
     def prepare_eval_prompts(self):
