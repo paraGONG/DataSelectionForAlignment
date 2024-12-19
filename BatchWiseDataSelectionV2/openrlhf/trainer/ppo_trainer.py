@@ -203,9 +203,6 @@ class PPOTrainer(ABC):
         # prepare evaluation prompts
         eval_prompts = self.prepare_eval_prompts()
         
-        # compute eval gradients
-        eval_mean_reward = self.compute_eval_gradients(args, eval_prompts)
-
         for episode in range(start_episode, args.num_episodes):
             if isinstance(self.prompts_dataloader.sampler, DistributedSampler):
                 self.prompts_dataloader.sampler.set_epoch(
@@ -230,6 +227,8 @@ class PPOTrainer(ABC):
 
                     torch.cuda.empty_cache()
                     self.replay_buffer.normalize("advantages", self.strategy)
+                    # compute eval gradients
+                    eval_mean_reward = self.compute_eval_gradients(args, eval_prompts)
                     # compute influence
                     self.compute_influence(global_steps)
                     # data selection
