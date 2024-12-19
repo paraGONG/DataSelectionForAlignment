@@ -33,4 +33,4 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --wandb_run_name selectionv2_chosen \
   --select_policy chosen \
   --buffer_path ../buffer \
-  --evaluation_data_path ../../../evaluation_data.jsonl \
+  --evaluation_data_path ../../evaluation_data.jsonl \
