@@ -605,3 +605,5 @@ class PPOTrainer(ABC):
             self.replay_buffer.items = sorted_items[-chose_size:]
         elif self.select_policy == "random":
             self.replay_buffer.items = random.sample(sorted_items, chose_size)
+        else:
+            raise ValueError(f"Invalid select_policy: {self.select_policy}. Must be 'chosen', 'rejected', or 'random'.")
