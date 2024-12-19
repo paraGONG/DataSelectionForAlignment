@@ -478,6 +478,7 @@ class PPOTrainer(ABC):
             "lambd": self.generate_kwargs["lambd"]
         }
 
+        rewards = []
         for prompt in tqdm(eval_prompts):
             experience = self.experience_maker.make_experience(prompt, **greedy_generate_kwargs)
             output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
@@ -485,9 +486,10 @@ class PPOTrainer(ABC):
             #     data = {'output': output[0], 'reward': experience.info["reward"].item()}
             #     json.dump(data, f)
             #     f.write('\n')
+            rewards.append(experience.info["reward"].item())
             self.eval_replay_buffer.append(experience)
         
-         # compute eval gradients
+        # compute eval gradients
         self.eval_gradients.clear()
         torch.cuda.empty_cache()
         eval_dataloader = DataLoader(
@@ -527,6 +529,7 @@ class PPOTrainer(ABC):
 
         self.eval_replay_buffer.clear()        
         torch.cuda.empty_cache()
+        return sum(rewards) / len(rewards)
 
     def clear_gradient(self):
         if self.actor.model.bfloat16_enabled():
