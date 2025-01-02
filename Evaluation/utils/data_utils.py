@@ -41,5 +41,5 @@ def load_remote_dataset(data_path, start=0):
     dataset = load_dataset(data_path, split="train")
     data = []
     for line in dataset:
-        data.append({"prompt": line["prompt"], "source": line["source"]})
+        data.append({"prompt": line["prompt"]})
     return data
