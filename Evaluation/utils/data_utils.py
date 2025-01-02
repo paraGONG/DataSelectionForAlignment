@@ -38,7 +38,7 @@ def load_local_dataset(data_path, start=0):
     return data
 
 def load_remote_dataset(data_path, start=0):
-    dataset = load_dataset(data_path, split="test")
+    dataset = load_dataset(data_path, split="train")
     data = []
     for line in dataset:
         data.append({"prompt": line["prompt"], "source": line["source"]})
