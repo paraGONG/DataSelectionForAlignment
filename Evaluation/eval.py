@@ -19,7 +19,7 @@ def parse_arguments():
     parser.add_argument("-m", "--model", type=str, default=None, help="evaluation model path")
     parser.add_argument("-b", "--batch_size", type=int, default=8, help="Batch size")
     parser.add_argument("-i", "--device", type=str, default="cuda:0", help="device")
-    parser.add_argument("-o", "--output_dir", type=str, default="./evaluation_results", help="output dir")
+    parser.add_argument("-o", "--output_dir", type=str, default="./evaluation_results_v2", help="output dir")
     parser.add_argument("-f", "--inference", action="store_true", help="if inference model or use a existing file")
     parser.add_argument("-r", "--reward", action="store_true", help="if compute reward")
     parser.add_argument("-rm", "--reward_model", type=str, default="yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model", help="reward model")
@@ -28,7 +28,7 @@ def parse_arguments():
 
 
 class TextDataset(Dataset):
-    def __init__(self, args, tokenizer, data, max_length=2048):
+    def __init__(self, args, tokenizer, data, max_length=1024):
         self.args = args
         self.tokenizer = tokenizer
         self.data = data
