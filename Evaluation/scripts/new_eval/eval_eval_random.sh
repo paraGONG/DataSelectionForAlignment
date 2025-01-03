@@ -1,5 +1,5 @@
 python eval.py \
-    --data yifangong/harmful_test \
+    --data yifangong/evaluation_data \
     --model yifangong/tinyllama_random \
     --batch_size 4 \
     --device "cuda:2" \
