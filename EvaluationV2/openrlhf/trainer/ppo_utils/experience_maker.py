@@ -37,10 +37,6 @@ class Experience:
     """
 
     sequences: torch.Tensor
-    action_log_probs: torch.Tensor
-    values: torch.Tensor
-    returns: torch.Tensor
-    advantages: torch.Tensor
     attention_mask: Optional[torch.LongTensor]
     action_mask: Optional[torch.BoolTensor]
     info: Optional[dict]
@@ -48,10 +44,6 @@ class Experience:
     @torch.no_grad()
     def to_device(self, device: torch.device) -> None:
         self.sequences = self.sequences.to(device)
-        self.action_log_probs = self.action_log_probs.to(device)
-        self.values = self.values.to(device)
-        self.returns = self.returns.to(device)
-        self.advantages = self.advantages.to(device)
         if self.attention_mask is not None:
             self.attention_mask = self.attention_mask.to(device)
         if self.action_mask is not None:
@@ -59,10 +51,6 @@ class Experience:
 
     def pin_memory(self):
         self.sequences = self.sequences.pin_memory()
-        self.action_log_probs = self.action_log_probs.pin_memory()
-        self.values = self.values.pin_memory()
-        self.returns = self.returns.pin_memory()
-        self.advantages = self.advantages.pin_memory()
         if self.attention_mask is not None:
             self.attention_mask = self.attention_mask.pin_memory()
         if self.action_mask is not None:
@@ -126,7 +114,7 @@ class NaiveExperienceMaker(ABC):
         num_actions = action_mask.size(1)
 
         # log probs
-        action_log_probs = self.actor(sequences, num_actions, attention_mask)
+        # action_log_probs = self.actor(sequences, num_actions, attention_mask)
 
         # init log probs
         # base_action_log_probs = self.initial_model(sequences, num_actions, attention_mask)
@@ -167,7 +155,6 @@ class NaiveExperienceMaker(ABC):
 
         return Experience(
             sequences,
-            action_log_probs,
             attention_mask,
             action_mask,
             info,
