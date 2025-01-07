@@ -1,4 +1,4 @@
-deepspeed --module --hostfile=None --master_port 29503 --include localhost:3 openrlhf.cli.train_ppo \
+deepspeed --module --hostfile=None --master_port 29500 --include localhost:0 openrlhf.cli.train_ppo \
   --pretrain  yifangong/tinyllama_full_candidate \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
   --save_path ../../checkpoint/selectionv2/base \
