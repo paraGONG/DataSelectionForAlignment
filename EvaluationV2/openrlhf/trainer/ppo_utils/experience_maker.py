@@ -129,10 +129,10 @@ class NaiveExperienceMaker(ABC):
         action_log_probs = self.actor(sequences, num_actions, attention_mask)
 
         # init log probs
-        base_action_log_probs = self.initial_model(sequences, num_actions, attention_mask)
+        # base_action_log_probs = self.initial_model(sequences, num_actions, attention_mask)
 
         # values
-        value = self.critic(sequences, action_mask, attention_mask)
+        # value = self.critic(sequences, action_mask, attention_mask)
 
         # rewards
         if self.remote_rm_url is not None:
@@ -143,38 +143,31 @@ class NaiveExperienceMaker(ABC):
             # local RM
             r = self.reward_model(sequences, attention_mask)
 
-        reward, kl = compute_reward(
-            r,
-            self.kl_ctl.value,
-            action_log_probs,
-            base_action_log_probs,
-            action_mask=action_mask,
-        )
-        advantage, returns = self.get_advantages_and_returns(
-            value,
-            reward,
-            action_mask,
-            generate_kwargs["gamma"],
-            generate_kwargs["lambd"],
-        )
+        # reward, kl = compute_reward(
+        #     r,
+        #     self.kl_ctl.value,
+        #     action_log_probs,
+        #     base_action_log_probs,
+        #     action_mask=action_mask,
+        # )
+        # advantage, returns = self.get_advantages_and_returns(
+        #     value,
+        #     reward,
+        #     action_mask,
+        #     generate_kwargs["gamma"],
+        #     generate_kwargs["lambd"],
+        # )
 
         info = {
-            "kl": masked_mean(kl, action_mask, dim=-1),
-            "reward": r,
-            "return": reward.sum(dim=-1),
-            "response_length": action_mask.float().sum(dim=-1),
-            "total_length": attention_mask.float().sum(dim=-1),
+            "reward": r
         }
         # reset model state
-        self.actor.train()
-        self.critic.train()
+        # self.actor.train()
+        # self.critic.train()
 
         return Experience(
             sequences,
             action_log_probs,
-            value,
-            returns,
-            advantage,
             attention_mask,
             action_mask,
             info,
