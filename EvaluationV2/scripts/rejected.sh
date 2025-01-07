@@ -34,4 +34,4 @@ deepspeed --module --hostfile=None --master_port 29502 --include localhost:2 ope
   --wandb_run_name selectionv2_rejected \
   --select_policy rejected \
   --buffer_path ../buffer \
-  --evaluation_data_path ../../evaluation_data.jsonl \
+  --evaluation_data_path ./harmful_test_v2/harmfulv2.jsonl \

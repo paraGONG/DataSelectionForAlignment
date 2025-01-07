@@ -34,4 +34,4 @@ deepspeed --module --hostfile=None --master_port 29501 --include localhost:1 ope
   --wandb_run_name selectionv2_random \
   --select_policy random \
   --buffer_path ../buffer \
-  --evaluation_data_path ../../evaluation_data.jsonl \
+  --evaluation_data_path ./harmful_test_v2/harmfulv2.jsonl \
