@@ -145,26 +145,26 @@ class PPOTrainer(ABC):
         )
         self.replay_buffer = NaiveReplayBuffer(micro_train_batch_size, buffer_limit, buffer_cpu_offload)
 
-        self._wandb = None
-        if self.strategy.args.use_wandb and self.strategy.is_rank_0():
-            import wandb
+        # self._wandb = None
+        # if self.strategy.args.use_wandb and self.strategy.is_rank_0():
+        #     import wandb
 
-            self._wandb = wandb
-            if not wandb.api.api_key:
-                wandb.login(key=strategy.args.use_wandb)
-            wandb.init(
-                entity=strategy.args.wandb_org,
-                project=strategy.args.wandb_project,
-                group=strategy.args.wandb_group,
-                name=strategy.args.wandb_run_name,
-                config=strategy.args.__dict__,
-                reinit=True,
-            )
+        #     self._wandb = wandb
+        #     if not wandb.api.api_key:
+        #         wandb.login(key=strategy.args.use_wandb)
+        #     wandb.init(
+        #         entity=strategy.args.wandb_org,
+        #         project=strategy.args.wandb_project,
+        #         group=strategy.args.wandb_group,
+        #         name=strategy.args.wandb_run_name,
+        #         config=strategy.args.__dict__,
+        #         reinit=True,
+        #     )
 
-            wandb.define_metric("train/global_step")
-            wandb.define_metric("train/*", step_metric="train/global_step", step_sync=True)
-            wandb.define_metric("eval/epoch")
-            wandb.define_metric("eval/*", step_metric="eval/epoch", step_sync=True)
+        #     wandb.define_metric("train/global_step")
+        #     wandb.define_metric("train/*", step_metric="train/global_step", step_sync=True)
+        #     wandb.define_metric("eval/epoch")
+        #     wandb.define_metric("eval/*", step_metric="eval/epoch", step_sync=True)
 
         self.eval_data_path = eval_data_path
         self.eval_gradients = []
