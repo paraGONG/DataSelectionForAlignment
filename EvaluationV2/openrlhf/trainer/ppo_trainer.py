@@ -494,48 +494,48 @@ class PPOTrainer(ABC):
             #     json.dump(data, f)
             #     f.write('\n')
             rewards.append(experience.info["reward"].item())
-            self.eval_replay_buffer.append(experience)
+            # self.eval_replay_buffer.append(experience)
         
-        # compute eval gradients
-        self.eval_gradients.clear()
-        torch.cuda.empty_cache()
-        eval_dataloader = DataLoader(
-            self.eval_replay_buffer,
-            batch_size=self.eval_replay_buffer.sample_batch_size,
-            shuffle=False,
-            drop_last=False,
-            pin_memory=self.dataloader_pin_memory,
-            collate_fn=self.eval_replay_buffer.collate_fn,
-        )
-        device = torch.cuda.current_device()
-        for experience in eval_dataloader:
-            experience.to_device(device)
-            self.actor.train()
+        # # compute eval gradients
+        # self.eval_gradients.clear()
+        # torch.cuda.empty_cache()
+        # eval_dataloader = DataLoader(
+        #     self.eval_replay_buffer,
+        #     batch_size=self.eval_replay_buffer.sample_batch_size,
+        #     shuffle=False,
+        #     drop_last=False,
+        #     pin_memory=self.dataloader_pin_memory,
+        #     collate_fn=self.eval_replay_buffer.collate_fn,
+        # )
+        # device = torch.cuda.current_device()
+        # for experience in eval_dataloader:
+        #     experience.to_device(device)
+        #     self.actor.train()
 
-            num_actions = experience.action_mask.size(1)
-            # actor loss
-            action_log_probs, output = self.actor(
-                experience.sequences, num_actions, attention_mask=experience.attention_mask, return_output=True
-            )
+        #     num_actions = experience.action_mask.size(1)
+        #     # actor loss
+        #     action_log_probs, output = self.actor(
+        #         experience.sequences, num_actions, attention_mask=experience.attention_mask, return_output=True
+        #     )
 
-            # loss function
-            actor_loss = self.actor_loss_fn(
-                action_log_probs,
-                experience.action_log_probs,
-                experience.advantages,
-                action_mask=experience.action_mask,
-            )
+        #     # loss function
+        #     actor_loss = self.actor_loss_fn(
+        #         action_log_probs,
+        #         experience.action_log_probs,
+        #         experience.advantages,
+        #         action_mask=experience.action_mask,
+        #     )
 
-            loss = actor_loss
-            self.actor.model.optimizer.backward(loss)
-            # save gradient
-            vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
-            self.eval_gradients.append(vectorized_grads)
-            # clear gradient
-            self.clear_gradient()
+        #     loss = actor_loss
+        #     self.actor.model.optimizer.backward(loss)
+        #     # save gradient
+        #     vectorized_grads = torch.cat([p.grad.view(-1) for p in self.actor.parameters() if p.grad is not None])
+        #     self.eval_gradients.append(vectorized_grads)
+        #     # clear gradient
+        #     self.clear_gradient()
 
-        self.eval_replay_buffer.clear()        
-        torch.cuda.empty_cache()
+        # self.eval_replay_buffer.clear()        
+        # torch.cuda.empty_cache()
         return sum(rewards) / len(rewards)
 
     def clear_gradient(self):
