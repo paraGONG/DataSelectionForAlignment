@@ -202,6 +202,10 @@ class PPOTrainer(ABC):
         
         # prepare evaluation prompts
         eval_prompts = self.prepare_eval_prompts()
+        eval_mean_reward = self.compute_eval_gradients(args, eval_prompts)
+        
+        print(eval_mean_reward)
+        return
         
         for episode in range(start_episode, args.num_episodes):
             if isinstance(self.prompts_dataloader.sampler, DistributedSampler):
