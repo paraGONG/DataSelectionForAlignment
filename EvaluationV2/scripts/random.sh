@@ -1,5 +1,5 @@
-deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
-  --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
+deepspeed --module --hostfile=None --master_port 29501 --include localhost:1 openrlhf.cli.train_ppo \
+  --pretrain  yifangong/tinyllama_random \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
   --save_path ../../checkpoint/selectionv2/random \
   --ckpt_path  ../../tinyllama-warmup-ckpt  \

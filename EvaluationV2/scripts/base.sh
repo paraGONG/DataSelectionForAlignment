@@ -1,7 +1,7 @@
-deepspeed --module --hostfile=None --master_port 29502 --include localhost:2 openrlhf.cli.train_ppo \
-  --pretrain  yifangong/tinyllama_rejected \
+deepspeed --module --hostfile=None --master_port 29503 --include localhost:3 openrlhf.cli.train_ppo \
+  --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
-  --save_path ../../checkpoint/selectionv2/rejected \
+  --save_path ../../checkpoint/selectionv2/base \
   --ckpt_path  ../../tinyllama-warmup-ckpt  \
   --save_steps 10 \
   --max_ckpt_num 1000 \
