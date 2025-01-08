@@ -227,7 +227,7 @@ class PPOTrainer(ABC):
                     global_steps = steps // update_timesteps
 
                     torch.cuda.empty_cache()
-                    self.replay_buffer.normalize("advantages", self.strategy)
+                    # self.replay_buffer.normalize("advantages", self.strategy)
                     # compute eval gradients
                     eval_mean_reward = self.compute_eval_gradients(args, eval_prompts)
                     # compute influence
@@ -237,8 +237,8 @@ class PPOTrainer(ABC):
                     self.influence_scores = [score.float().cpu().numpy() for score in self.influence_scores]
                     # record influence_score
                     self.influence_scores = sorted(self.influence_scores, reverse=True)
-                    print(self.influence_scores)
-                    np.save(f'influence_scores_{torch.cuda.current_device()}_step_{steps}.npy', np.array(self.influence_scores))
+                    # print(self.influence_scores)
+                    np.save(f'influence_scores_{torch.cuda.current_device()}_step_{steps}_woan.npy', np.array(self.influence_scores))
 
                     # data selection
                     self.data_selection()
