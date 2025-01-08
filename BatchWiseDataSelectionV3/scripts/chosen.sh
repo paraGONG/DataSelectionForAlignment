@@ -31,7 +31,7 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --flash_attn \
   --use_wandb dca3db2a5790b6d0133b22f305b32fb844c224ef \
   --wandb_project selectionv3 \
-  --wandb_run_name selectionv3_chosen \
+  --wandb_run_name selectionv3_chosen_woan \
   --select_policy chosen \
   --buffer_path ../buffer \
   --evaluation_data_path ../../evaluation_data.jsonl \
