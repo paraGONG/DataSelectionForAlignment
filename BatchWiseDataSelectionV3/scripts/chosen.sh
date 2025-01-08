@@ -7,7 +7,7 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --max_ckpt_num 1000 \
   --logging_steps 1 \
   --eval_steps -1 \
-  --micro_train_batch_size 2 \
+  --micro_train_batch_size 4 \
   --train_batch_size 128 \
   --micro_rollout_batch_size 8 \
   --rollout_batch_size 512 \
