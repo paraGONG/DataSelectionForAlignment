@@ -233,6 +233,8 @@ class PPOTrainer(ABC):
                     # compute influence
                     self.compute_influence(global_steps)
 
+                    # self.influence_scores = [score.float() for score in self.influence_scores]
+                    self.influence_scores = [score.float().cpu().numpy() for score in self.influence_scores]
                     # record influence_score
                     self.influence_scores = sorted(self.influence_scores, reverse=True)
                     print(self.influence_scores)
