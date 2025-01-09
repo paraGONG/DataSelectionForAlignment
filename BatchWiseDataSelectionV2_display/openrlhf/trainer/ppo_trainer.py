@@ -19,6 +19,7 @@ from openrlhf.utils.distributed_sampler import DistributedSampler
 from .ppo_utils import AdaptiveKLController, Experience, FixedKLController, NaiveExperienceMaker, NaiveReplayBuffer
 
 import random
+import numpy as np
 
 random.seed(42)
 
@@ -226,11 +227,19 @@ class PPOTrainer(ABC):
                     global_steps = steps // update_timesteps
 
                     torch.cuda.empty_cache()
-                    self.replay_buffer.normalize("advantages", self.strategy)
+                    # self.replay_buffer.normalize("advantages", self.strategy)
                     # compute eval gradients
                     eval_mean_reward = self.compute_eval_gradients(args, eval_prompts)
                     # compute influence
                     self.compute_influence(global_steps)
+
+                    # self.influence_scores = [score.float() for score in self.influence_scores]
+                    self.influence_scores = [score.float().cpu().numpy() for score in self.influence_scores]
+                    # record influence_score
+                    self.influence_scores = sorted(self.influence_scores, reverse=True)
+                    # print(self.influence_scores)
+                    np.save(f'influence_scores_{torch.cuda.current_device()}_step_{steps}_woan.npy', np.array(self.influence_scores))
+
                     # data selection
                     self.data_selection()
                     # ppo train
@@ -256,7 +265,7 @@ class PPOTrainer(ABC):
         dataloader = DataLoader(
             self.replay_buffer,
             batch_size=self.replay_buffer.sample_batch_size,
-            shuffle=False,
+            shuffle=True,
             drop_last=True,
             pin_memory=self.dataloader_pin_memory,
             collate_fn=self.replay_buffer.collate_fn,
@@ -598,7 +607,7 @@ class PPOTrainer(ABC):
         sorted_zipped = sorted(zipped, key=lambda x: x[0], reverse=True)
         sorted_numbers, sorted_items = zip(*sorted_zipped)
         sorted_items = list(sorted_items)
-        chose_size = len(sorted_items) // 4
+        chose_size = len(sorted_items)
         if self.select_policy == "chosen":
             self.replay_buffer.items = sorted_items[:chose_size]
         elif self.select_policy == "rejected":
