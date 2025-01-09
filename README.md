@@ -8,6 +8,8 @@ cd ref\OpenRLHF-main
 
 pip install -e .
 
+pip install flash-attn
+
 pip uninstall openrlhf
 
 cd ../../../
