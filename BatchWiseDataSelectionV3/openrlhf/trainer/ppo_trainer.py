@@ -171,7 +171,6 @@ class PPOTrainer(ABC):
         self.eval_gradients = []
         self.influence_scores = []
         self.eval_replay_buffer = NaiveReplayBuffer(micro_train_batch_size, buffer_limit, buffer_cpu_offload)
-        # select policy
         self.select_policy = select_policy
         self.select_proportion = select_proportion
 
