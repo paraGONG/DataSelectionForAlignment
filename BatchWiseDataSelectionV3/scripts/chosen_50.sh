@@ -30,7 +30,7 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --critic_lora_alpha 16 \
   --flash_attn \
   --use_wandb dca3db2a5790b6d0133b22f305b32fb844c224ef \
-  --wandb_project selectionv3 \
+  --wandb_project selectionv3_chosen \
   --wandb_run_name selectionv3_chosen_50 \
   --select_policy chosen \
   --select_proportion 0.5 \
