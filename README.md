@@ -7,6 +7,7 @@ cd ref\OpenRLHF-main
 pip install -e .
 pip uninstall openrlhf
 
+cd到DataSelectionForAlignment外
 
 cd ../../../
 sudo apt-get install git-lfs
