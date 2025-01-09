@@ -232,7 +232,7 @@ class PPOTrainer(ABC):
                     # compute influence
                     self.compute_influence(global_steps)
                     # data selection
-                    self.data_selection()
+                    self.data_sorting()
                     # ppo train
                     status = self.ppo_train(global_steps)
                     # add eval mean reward
@@ -263,6 +263,8 @@ class PPOTrainer(ABC):
         )
         device = torch.cuda.current_device()
 
+        threshold = len(dataloader) * self.proportion
+
         status_list = []
         status_mean = {}
         for epoch in range(self.max_epochs):
@@ -271,9 +273,14 @@ class PPOTrainer(ABC):
                 desc=f"Train epoch [{epoch + 1}/{self.max_epochs}]",
                 disable=not self.strategy.is_rank_0(),
             )
-            for experience in pbar:
+            for i, experience in enumerate(pbar):
                 experience.to_device(device)
-                status = self.training_step(experience, global_steps)
+                # status = self.training_step(experience, global_steps)
+                status = {}
+                if global_steps > self.freezing_actor_steps:
+                    if i < threshold:
+                        status = self.training_step_actor(experience)
+                status.update(self.training_step_critic(experience))
 
                 # for DP
                 # weighted mean for kl
@@ -315,12 +322,12 @@ class PPOTrainer(ABC):
                 status_mean[k] /= len(status_list)
         return status_mean
 
-    def training_step(self, experience: Experience, global_steps) -> Dict[str, float]:
-        status = {}
-        if global_steps > self.freezing_actor_steps:
-            status = self.training_step_actor(experience)
-        status.update(self.training_step_critic(experience))
-        return status
+    # def training_step(self, experience: Experience, global_steps) -> Dict[str, float]:
+    #     status = {}
+    #     if global_steps > self.freezing_actor_steps:
+    #         status = self.training_step_actor(experience)
+    #     status.update(self.training_step_critic(experience))
+    #     return status
 
     def training_step_actor(self, experience: Experience) -> Dict[str, float]:
         self.actor.train()
@@ -592,18 +599,19 @@ class PPOTrainer(ABC):
             self.clear_gradient()
             training_step = training_step + 1
 
-    def data_selection(self):
+    def data_sorting(self):
         items = self.replay_buffer.items
         zipped = list(zip(self.influence_scores, items))
         sorted_zipped = sorted(zipped, key=lambda x: x[0], reverse=True)
         sorted_numbers, sorted_items = zip(*sorted_zipped)
         sorted_items = list(sorted_items)
-        chose_size = len(sorted_items) // 4
-        if self.select_policy == "chosen":
-            self.replay_buffer.items = sorted_items[:chose_size]
-        elif self.select_policy == "rejected":
-            self.replay_buffer.items = sorted_items[-chose_size:]
-        elif self.select_policy == "random":
-            self.replay_buffer.items = random.sample(sorted_items, chose_size)
-        else:
-            raise ValueError(f"Invalid select_policy: {self.select_policy}. Must be 'chosen', 'rejected', or 'random'.")
+        # chose_size = len(sorted_items) // 4
+        self.replay_buffer.items = sorted_items
+        # if self.select_policy == "chosen":
+        #     self.replay_buffer.items = sorted_items[:chose_size]
+        # elif self.select_policy == "rejected":
+        #     self.replay_buffer.items = sorted_items[-chose_size:]
+        # elif self.select_policy == "random":
+        #     self.replay_buffer.items = random.sample(sorted_items, chose_size)
+        # else:
+        #     raise ValueError(f"Invalid select_policy: {self.select_policy}. Must be 'chosen', 'rejected', or 'random'.")
