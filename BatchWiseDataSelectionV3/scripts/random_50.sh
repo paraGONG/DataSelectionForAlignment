@@ -1,7 +1,7 @@
 deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
-  --save_path ../../checkpoint/selectionv2/chosen \
+  --save_path ../../checkpoint/selectionv3/random_50 \
   --ckpt_path  ../../tinyllama-warmup-ckpt  \
   --save_steps 10 \
   --max_ckpt_num 1000 \
@@ -30,8 +30,9 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --critic_lora_alpha 16 \
   --flash_attn \
   --use_wandb dca3db2a5790b6d0133b22f305b32fb844c224ef \
-  --wandb_project selectionv2 \
-  --wandb_run_name selectionv2_chosen \
-  --select_policy chosen \
+  --wandb_project selectionv3 \
+  --wandb_run_name selectionv3_random_50 \
+  --select_policy random \
+  --select_proportion 0.5 \
   --buffer_path ../buffer \
   --evaluation_data_path ../../evaluation_data.jsonl \

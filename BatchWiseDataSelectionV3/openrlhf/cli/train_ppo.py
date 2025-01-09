@@ -241,6 +241,7 @@ def train(args):
         max_norm=args.max_norm,
         eval_data_path=args.evaluation_data_path,
         select_policy=args.select_policy,
+        select_proportion=args.select_proportion,
         # fro GPT generation
         do_sample=True,
         max_new_tokens=args.generate_max_len,
@@ -387,6 +388,7 @@ if __name__ == "__main__":
     )
 
     parser.add_argument("--select_policy", type=str, default=None)
+    parser.add_argument("--select_proportion", type=float, default=0.75)
     parser.add_argument("--buffer_path", type=str, default="../buffer")
     parser.add_argument("--evaluation_data_path", type=str, default=None)
 

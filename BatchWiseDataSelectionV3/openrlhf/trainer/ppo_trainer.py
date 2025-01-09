@@ -78,6 +78,7 @@ class PPOTrainer(ABC):
         max_norm: float = 1.0,
         eval_data_path: str = None,
         select_policy: str = None,
+        select_proportion: float = 0.75,
         tokenizer: Optional[Callable[[Any], dict]] = None,
         prompt_max_len: int = 128,
         dataloader_pin_memory: bool = True,
@@ -171,7 +172,7 @@ class PPOTrainer(ABC):
         self.influence_scores = []
         self.eval_replay_buffer = NaiveReplayBuffer(micro_train_batch_size, buffer_limit, buffer_cpu_offload)
         self.select_policy = select_policy
-
+        self.select_proportion = select_proportion
 
     def fit(
         self,
@@ -256,14 +257,14 @@ class PPOTrainer(ABC):
         dataloader = DataLoader(
             self.replay_buffer,
             batch_size=self.replay_buffer.sample_batch_size,
-            shuffle=False,
+            shuffle=False if self.select_policy == "chosen" else True,
             drop_last=True,
             pin_memory=self.dataloader_pin_memory,
             collate_fn=self.replay_buffer.collate_fn,
         )
         device = torch.cuda.current_device()
 
-        threshold = len(dataloader) * self.proportion
+        threshold = len(dataloader) * self.select_proportion
 
         status_list = []
         status_mean = {}
@@ -275,6 +276,8 @@ class PPOTrainer(ABC):
             )
             for i, experience in enumerate(pbar):
                 experience.to_device(device)
+
+                # training step
                 # status = self.training_step(experience, global_steps)
                 status = {}
                 if global_steps > self.freezing_actor_steps:
