@@ -258,7 +258,7 @@ class PPOTrainer(ABC):
         dataloader = DataLoader(
             self.replay_buffer,
             batch_size=self.replay_buffer.sample_batch_size,
-            shuffle=False if self.select_policy == "chosen" else True,
+            shuffle=False,
             drop_last=True,
             pin_memory=self.dataloader_pin_memory,
             collate_fn=self.replay_buffer.collate_fn,
@@ -610,6 +610,10 @@ class PPOTrainer(ABC):
         sorted_numbers, sorted_items = zip(*sorted_zipped)
         sorted_items = list(sorted_items)
         # chose_size = len(sorted_items) // 4
+        selected_num = int(len(sorted_items) * self.select_proportion)
+        items_to_shuffle = sorted_items[:selected_num]
+        random.shuffle(items_to_shuffle)
+        sorted_items = items_to_shuffle + sorted_items[selected_num:]
         self.replay_buffer.items = sorted_items
         # if self.select_policy == "chosen":
         #     self.replay_buffer.items = sorted_items[:chose_size]
