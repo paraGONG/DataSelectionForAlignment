@@ -30,7 +30,7 @@ deepspeed --module --hostfile=None --master_port 29501 --include localhost:4,5,6
   --critic_lora_alpha 16 \
   --flash_attn \
   --use_wandb dca3db2a5790b6d0133b22f305b32fb844c224ef \
-  --wandb_project selectionv3 \
+  --wandb_project selectionv3_random_75 \
   --wandb_run_name selectionv3_random_75 \
   --select_policy random \
   --select_proportion 0.75 \
