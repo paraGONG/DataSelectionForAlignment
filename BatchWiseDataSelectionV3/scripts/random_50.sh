@@ -1,4 +1,4 @@
-deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
+deepspeed --module --hostfile=None --master_port 29501 --include localhost:4,5,6,7 openrlhf.cli.train_ppo \
   --pretrain  TinyLlama/TinyLlama-1.1B-Chat-v1.0 \
   --reward_pretrain yifangong/TinyLlama-1.1B-Chat-v1.0-reward-model \
   --save_path ../../checkpoint/selectionv3/random_50 \
@@ -30,7 +30,7 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --critic_lora_alpha 16 \
   --flash_attn \
   --use_wandb dca3db2a5790b6d0133b22f305b32fb844c224ef \
-  --wandb_project selectionv3 \
+  --wandb_project selectionv3_random_50 \
   --wandb_run_name selectionv3_random_50 \
   --select_policy random \
   --select_proportion 0.5 \
