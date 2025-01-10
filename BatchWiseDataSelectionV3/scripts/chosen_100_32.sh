@@ -33,6 +33,6 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --wandb_project selectionv3_chosen_100_32 \
   --wandb_run_name selectionv3_chosen_100_32 \
   --select_policy chosen \
-  --select_proportion 0.9 \
+  --select_proportion 1 \
   --buffer_path ../buffer \
   --evaluation_data_path ../data/evaluation_data_harmless_32.jsonl \
