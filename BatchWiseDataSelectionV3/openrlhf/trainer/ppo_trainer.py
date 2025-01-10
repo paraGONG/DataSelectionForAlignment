@@ -277,7 +277,8 @@ class PPOTrainer(ABC):
             )
             for i, experience in enumerate(pbar):
                 experience.to_device(device)
-
+                print("threshold: ", threshold)
+                print("i: ", i)
                 # training step
                 # status = self.training_step(experience, global_steps)
                 status = {}
