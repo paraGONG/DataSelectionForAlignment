@@ -648,7 +648,7 @@ class PPOTrainer(ABC):
                 json_obj = {
                     "data" : 'high_inf', 'output': output[0], 'loss': loss,
                     'reward': item.info["reward"], 'returns': item.returns.mean().item(),'advantage':item.advantages.mean().item(), 'values':item.values.mean().item(), 
-                    "influence": influence
+                    "influence": influence.item()
                 }
                 f.write(json.dumps(json_obj) + "\n")  # 每个 JSON 对象占一行
 
@@ -659,7 +659,7 @@ class PPOTrainer(ABC):
                 json_obj = {
                     "data" : 'low_inf', 'output': output[0], 'loss': loss,
                     'reward': item.info["reward"], 'returns': item.returns.mean().item(),'advantage':item.advantages.mean().item(), 'values':item.values.mean().item(), 
-                    "influence": influence
+                    "influence": influence.item()
                 }
                 f.write(json.dumps(json_obj) + "\n")  # 每个 JSON 对象占一行
 
