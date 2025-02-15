@@ -513,7 +513,7 @@ class PPOTrainer(ABC):
         eval_dataloader = DataLoader(
             self.eval_replay_buffer,
             # batch_size=1,
-            batch_size=self.eval_replay_buffer.sample_batch_size,
+            batch_size=1,
             shuffle=False,
             drop_last=False,
             pin_memory=self.dataloader_pin_memory,
@@ -542,13 +542,13 @@ class PPOTrainer(ABC):
             
             output = self.tokenizer.batch_decode(experience.sequences, skip_special_tokens=True)
             # save here
-            # with open(os.path.join(self.output_save_path, f'steps_{steps}_validation.jsonl'), 'a') as f:
-            #     data = {'data': 'validation', 'output': output[0], 'loss': loss.item(),
-            #             'reward': experience.info["reward"].item(), 'return': experience.info["return"].item(), 
-            #             'advantage': experience.advantages.mean().item(), 'value': experience.values.mean().item(),
-            #             'response_length':experience.info['response_length'].item(), 'total_length':experience.info['total_length'].item()}
-            #     json.dump(data, f)
-            #     f.write('\n')
+            with open(os.path.join(self.output_save_path, f'steps_{steps}_validation.jsonl'), 'a') as f:
+                data = {'data': 'validation', 'output': output[0], 'loss': loss.item(),
+                        'reward': experience.info["reward"].item(), 'return': experience.info["return"].item(), 
+                        'advantage': experience.advantages.mean().item(), 'value': experience.values.mean().item(),
+                        'response_length':experience.info['response_length'].item(), 'total_length':experience.info['total_length'].item()}
+                json.dump(data, f)
+                f.write('\n')
 
             self.actor.model.optimizer.backward(loss)
             # save gradient
@@ -650,7 +650,7 @@ class PPOTrainer(ABC):
             for influence, item, loss in top_20_data:
                 output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
                 json_obj = {
-                    "data" : 'high_inf', 'output': output[0], 'loss': loss,
+                    "data" : 'high_inf', 'output': output, 'loss': loss,
                     'reward': item.info["reward"], 'returns': item.returns.mean().item(),'advantage':item.advantages.mean().item(), 'values':item.values.mean().item(), 
                     "influence": influence.item()
                 }
@@ -661,7 +661,7 @@ class PPOTrainer(ABC):
             for influence, item, loss in bottom_20_data:
                 output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
                 json_obj = {
-                    "data" : 'low_inf', 'output': output[0], 'loss': loss,
+                    "data" : 'low_inf', 'output': output, 'loss': loss,
                     'reward': item.info["reward"], 'returns': item.returns.mean().item(),'advantage':item.advantages.mean().item(), 'values':item.values.mean().item(), 
                     "influence": influence.item()
                 }
