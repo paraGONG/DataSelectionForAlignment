@@ -645,9 +645,13 @@ class PPOTrainer(ABC):
         with open(os.path.join(self.output_save_path, f'steps_{steps}_high_inf.jsonl'), "w") as f:
             for influence, item, loss in top_20_data:
                 output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
+                print(type(item.info["reward"]))
+                print(type(item.returns))
+                print(type(item.advantages))
+                print(type(item.values))
                 json_obj = {
                     "data" : 'high_inf', 'output': output[0], 'loss': loss,
-                    'reward': item.info["reward"].item(), 'returns': item.returns.item(),'advantage':item.advatanges.item(), 'values':item.values.item(), 
+                    'reward': item.info["reward"], 'returns': item.returns.item(),'advantage':item.advantages.item(), 'values':item.values.item(), 
                     "influence": influence
                 }
                 f.write(json.dumps(json_obj) + "\n")  # 每个 JSON 对象占一行
@@ -658,7 +662,7 @@ class PPOTrainer(ABC):
                 output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
                 json_obj = {
                     "data" : 'low_inf', 'output': output[0], 'loss': loss,
-                    'reward': item.info["reward"].item(), 'returns': item.returns.item(),'advantage':item.advatanges.item(), 'values':item.values.item(), 
+                    'reward': item.info["reward"], 'returns': item.returns.item(),'advantage':item.advantages.item(), 'values':item.values.item(), 
                     "influence": influence
                 }
                 f.write(json.dumps(json_obj) + "\n")  # 每个 JSON 对象占一行
