@@ -648,6 +648,7 @@ class PPOTrainer(ABC):
         # 保存前10个元素到第一个 jsonl 文件
         with open(os.path.join(self.output_save_path, f'steps_{steps}_high_inf.jsonl'), "w") as f:
             for influence, item, loss in top_20_data:
+                print(type(item.sequences))
                 output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
                 json_obj = {
                     "data" : 'high_inf', 'output': output, 'loss': loss,
