@@ -511,7 +511,7 @@ class PPOTrainer(ABC):
         torch.cuda.empty_cache()
         eval_dataloader = DataLoader(
             self.eval_replay_buffer,
-            batch_size=self.eval_replay_buffer.sample_batch_size,
+            batch_size=1,
             shuffle=False,
             drop_last=False,
             pin_memory=self.dataloader_pin_memory,

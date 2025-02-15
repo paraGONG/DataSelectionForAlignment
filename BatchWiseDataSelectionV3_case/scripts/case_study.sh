@@ -8,9 +8,9 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --logging_steps 1 \
   --eval_steps -1 \
   --micro_train_batch_size 4 \
-  --train_batch_size 128 \
+  --train_batch_size 16 \
   --micro_rollout_batch_size 8 \
-  --rollout_batch_size 512 \
+  --rollout_batch_size 64 \
   --max_epochs 1 \
   --prompt_max_len 1024 \
   --generate_max_len 1024 \
