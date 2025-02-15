@@ -28,7 +28,7 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --actor_lora_alpha 16 \
   --critic_lora_rank 8 \
   --critic_lora_alpha 16 \
-  --use_wandb dca3db2a5790b6d0133b22f305b32fb844c224ef \
+  --use_wandb edfbb872a90db03dcc70a6c53157b55525cbc8d0 \
   --wandb_project selectionv3_case_study \
   --wandb_run_name selectionv3_case_study \
   --select_policy chosen \
