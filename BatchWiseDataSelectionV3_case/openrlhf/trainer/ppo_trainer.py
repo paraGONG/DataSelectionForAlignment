@@ -646,7 +646,7 @@ class PPOTrainer(ABC):
             for influence, item, loss in top_20_data:
                 output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
                 json_obj = {
-                    "data" : 'high_inf', 'output': output[0], 'loss': loss.item(),
+                    "data" : 'high_inf', 'output': output[0], 'loss': loss,
                     'reward': item.info["reward"].item(), 'returns': item.returns.item(),'advantage':item.advatanges.item(), 'values':item.values.item(), 
                     "influence": influence
                 }
@@ -657,7 +657,7 @@ class PPOTrainer(ABC):
             for influence, item, loss in bottom_20_data:
                 output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
                 json_obj = {
-                    "data" : 'low_inf', 'output': output[0], 'loss': loss.item(),
+                    "data" : 'low_inf', 'output': output[0], 'loss': loss,
                     'reward': item.info["reward"].item(), 'returns': item.returns.item(),'advantage':item.advatanges.item(), 'values':item.values.item(), 
                     "influence": influence
                 }
