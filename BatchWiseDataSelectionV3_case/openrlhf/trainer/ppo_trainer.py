@@ -649,9 +649,9 @@ class PPOTrainer(ABC):
         with open(os.path.join(self.output_save_path, f'steps_{steps}_high_inf.jsonl'), "w") as f:
             for influence, item, loss in top_20_data:
                 print(type(item.sequences))
-                output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
+                output = self.tokenizer.batch_decode(item.sequences.unsqueeze(0), skip_special_tokens=True)
                 json_obj = {
-                    "data" : 'high_inf', 'output': output, 'loss': loss,
+                    "data" : 'high_inf', 'output': output[0], 'loss': loss,
                     'reward': item.info["reward"], 'returns': item.returns.mean().item(),'advantage':item.advantages.mean().item(), 'values':item.values.mean().item(), 
                     "influence": influence.item()
                 }
@@ -660,9 +660,9 @@ class PPOTrainer(ABC):
         # 保存后10个元素到第二个 jsonl 文件
         with open(os.path.join(self.output_save_path, f'steps_{steps}_low_inf.jsonl'), "w") as f:
             for influence, item, loss in bottom_20_data:
-                output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
+                output = self.tokenizer.batch_decode(item.sequences.unsqueeze(0), skip_special_tokens=True)
                 json_obj = {
-                    "data" : 'low_inf', 'output': output, 'loss': loss,
+                    "data" : 'low_inf', 'output': output[0], 'loss': loss,
                     'reward': item.info["reward"], 'returns': item.returns.mean().item(),'advantage':item.advantages.mean().item(), 'values':item.values.mean().item(), 
                     "influence": influence.item()
                 }
