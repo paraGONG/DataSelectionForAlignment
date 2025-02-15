@@ -651,7 +651,7 @@ class PPOTrainer(ABC):
                 print(type(item.values))
                 json_obj = {
                     "data" : 'high_inf', 'output': output[0], 'loss': loss,
-                    'reward': item.info["reward"], 'returns': item.returns.item(),'advantage':item.advantages.item(), 'values':item.values.item(), 
+                    'reward': item.info["reward"], 'returns': item.returns.mean().item(),'advantage':item.advantages.mean().item(), 'values':item.values.mean().item(), 
                     "influence": influence
                 }
                 f.write(json.dumps(json_obj) + "\n")  # 每个 JSON 对象占一行
@@ -662,7 +662,7 @@ class PPOTrainer(ABC):
                 output = self.tokenizer.batch_decode(item.sequences, skip_special_tokens=True)
                 json_obj = {
                     "data" : 'low_inf', 'output': output[0], 'loss': loss,
-                    'reward': item.info["reward"], 'returns': item.returns.item(),'advantage':item.advantages.item(), 'values':item.values.item(), 
+                    'reward': item.info["reward"], 'returns': item.returns.mean().item(),'advantage':item.advantages.mean().item(), 'values':item.values.mean().item(), 
                     "influence": influence
                 }
                 f.write(json.dumps(json_obj) + "\n")  # 每个 JSON 对象占一行
