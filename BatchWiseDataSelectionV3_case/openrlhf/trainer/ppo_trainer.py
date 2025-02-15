@@ -617,6 +617,8 @@ class PPOTrainer(ABC):
             mean_influences = torch.mean(torch.tensor(influences))
             self.influence_scores.append(mean_influences)
             self.actor_loss.append(loss.item())
+            self.eval_gradients.clear()
+            torch.cuda.empty_cache()
             self.clear_gradient()
             training_step = training_step + 1
 
