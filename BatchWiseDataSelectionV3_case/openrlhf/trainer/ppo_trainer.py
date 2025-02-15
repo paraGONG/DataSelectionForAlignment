@@ -240,6 +240,7 @@ class PPOTrainer(ABC):
                     # data selection
                     self.data_sorting(steps)
                     # ppo train
+                    torch.cuda.empty_cache()
                     status = self.ppo_train(global_steps)
                     # add eval mean reward
                     status["eval_mean_reward"] = eval_mean_reward

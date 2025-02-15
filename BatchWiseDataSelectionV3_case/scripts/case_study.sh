@@ -34,4 +34,4 @@ deepspeed --module --hostfile=None openrlhf.cli.train_ppo \
   --select_policy chosen \
   --select_proportion 1 \
   --buffer_path ../buffer \
-  --evaluation_data_path ../data/evaluation_data_harmless.jsonl \
+  --evaluation_data_path ../data/evaluation_data_harmless_case.jsonl \
